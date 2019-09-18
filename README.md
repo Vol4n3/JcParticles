@@ -1,4 +1,8 @@
 #Particles Lib js
+##Example
+
+* Imitation of particle.js https://vol4n3.github.io/JcParticles/example/01.html
+
 ##Usage
 
 **HTML**
