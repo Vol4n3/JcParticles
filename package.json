@@ -1,0 +1,19 @@
+{
+  "name": "jcparticle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc && npm run browserify && npm run uglify && npm run winRemoveTemp",
+    "browserify": "browserify ./temp/ts-out/index.js -o ./temp/browserify/jcparticle.js",
+    "uglify" : "uglifyjs ./temp/browserify/jcparticle.js -cm -o ./dist/JcParticle.js",
+    "winRemoveTemp": "rd /s/q \"./temp\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browserify": "^16.5.0",
+    "typescript": "^3.6.2"
+  }
+}
