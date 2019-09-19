@@ -1,4 +1,4 @@
-import {CanvasScene, IDraw} from './CanvasScene';
+import {CanvasScene, IDraw} from '../CanvasScene';
 import {Particle} from './Particle';
 
 export class ColoredParticle extends Particle implements IDraw {

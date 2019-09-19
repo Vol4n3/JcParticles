@@ -1,12 +1,12 @@
-import {Position} from './Position';
-import {CanvasScene, IDraw, IUpdate} from './CanvasScene';
+import {Position} from '../Position';
+import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
 
 export class Particle extends Position implements IUpdate, IDraw {
 	bounceOnBox: boolean = false;
 	distanceDisappear = 50;
 
 	update(scene: CanvasScene): void {
-		this.move();
+		super.update(scene);
 		if (this.bounceOnBox) {
 			this.bounceBox('x', scene.width);
 			this.bounceBox('x', 0, true);

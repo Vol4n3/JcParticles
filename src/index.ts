@@ -1,9 +1,10 @@
 import {CanvasScene} from './class/engine2D/CanvasScene';
 import {LinkedParticlesMap} from './class/engine2D/maps/LinkedParticlesMap';
 import {IMap} from './class/engine2D/maps/Map';
+import {ColoredWaveMap} from './class/engine2D/maps/ColoredWaveMap';
 
 interface IOptions {
-	demoType?: 'example01';
+	demoType?: 'example01' | 'example02';
 }
 
 class JcParticle {
@@ -25,6 +26,11 @@ class JcParticle {
 				this.scene.draws.push(...this.map.particles);
 				this.scene.updates.push(...this.map.particles);
 				this.scene.draws.push(this.map);
+				break;
+			case 'example02':
+				this.map = new ColoredWaveMap(this.scene);
+				this.scene.draws.push(...this.map.particles);
+				this.scene.updates.push(...this.map.particles);
 				break;
 		}
 	}

@@ -1,7 +1,8 @@
 import {Point} from '../geometry2D/Point';
+import {CanvasScene, IUpdate} from './CanvasScene';
 
 
-export class Position extends Point {
+export class Position extends Point implements IUpdate {
 	friction: Point = new Point(1, 1);
 	velocity: Point = new Point(0, 0);
 
@@ -13,7 +14,7 @@ export class Position extends Point {
 	protected _timeCount = 0;
 	protected _callback: () => void;
 
-	move() {
+	update(scene: CanvasScene): void {
 		if (!this._isTargeting) {
 			this.velocity.multiply(this.friction);
 			this.add(this.velocity);

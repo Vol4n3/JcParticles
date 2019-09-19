@@ -1,9 +1,11 @@
-import {ColoredParticle} from '../ColoredParticle';
+import {ColoredParticle} from '../particles/ColoredParticle';
 import {Link} from '../Link';
-import {CanvasScene} from '../CanvasScene';
+import {CanvasScene, IDraw} from '../CanvasScene';
 import {IMap} from './Map';
 
-export class LinkedParticlesMap implements IMap {
+export class LinkedParticlesMap implements IMap, IDraw {
+	update(scene: CanvasScene): void {
+	}
 	particles: ColoredParticle[] = [];
 	maxLinkLength: number = 100;
 

@@ -1,15 +1,16 @@
 import {Position} from './Position';
 import {Point} from '../geometry2D/Point';
 import {Rotation} from './Rotation';
+import {CanvasScene, IUpdate} from './CanvasScene';
 
-export class Camera {
+export class Camera implements IUpdate {
 	position: Position = new Position();
 	scale: Point = new Point(1, 1);
 	rotation: Rotation = new Rotation();
 
-	move() {
-		this.position.move();
-		this.rotation.move();
+	update(scene: CanvasScene) {
+		this.position.update(scene);
+		this.rotation.update(scene);
 	}
 	offsetX(n: number): number {
 		return n * this.scale.x + this.position.x;

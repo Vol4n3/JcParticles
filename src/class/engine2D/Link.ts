@@ -1,6 +1,6 @@
 import {Segment} from '../geometry2D/Segment';
 import {CanvasScene, IDraw} from './CanvasScene';
-import {ColoredParticle} from './ColoredParticle';
+import {ColoredParticle} from './particles/ColoredParticle';
 
 export class Link extends Segment<ColoredParticle> implements IDraw {
 	width: number = 2;
