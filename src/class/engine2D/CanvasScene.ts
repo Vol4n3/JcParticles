@@ -1,10 +1,11 @@
 import {Camera} from './Camera';
+import {Interaction} from './Interaction';
 
 export interface IDraw {
-	draw(game: CanvasScene): void;
+	draw(scene: CanvasScene): void;
 }
 export interface IUpdate {
-	update(game: CanvasScene): void;
+	update(scene: CanvasScene): void;
 }
 export class CanvasScene {
 	canvas: HTMLCanvasElement = document.createElement('canvas');
@@ -13,6 +14,7 @@ export class CanvasScene {
 	camera: Camera = new Camera();
 	draws: IDraw[] = [];
 	updates: IUpdate[] = [];
+	interaction: Interaction;
 	private _resizeRef = this.resize.bind(this);
 	private _animateRef = this.animate.bind(this);
 	private _loopRef = this.loop.bind(this);
@@ -35,6 +37,7 @@ export class CanvasScene {
 		this.resize();
 		this._animationFrame = requestAnimationFrame(this._animateRef);
 		this._interval = setInterval(this._loopRef, 1000/60);
+		this.interaction = new Interaction(this);
 	}
 
 	get height(): number {
@@ -62,5 +65,6 @@ export class CanvasScene {
 		window.removeEventListener('resize', this._resizeRef);
 		window.cancelAnimationFrame(this._animationFrame);
 		window.clearInterval(this._interval);
+		this.interaction.destroy();
 	}
 }

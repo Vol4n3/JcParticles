@@ -1,18 +1,18 @@
 import {Segment} from '../geometry2D/Segment';
 import {CanvasScene, IDraw} from './CanvasScene';
-import {Particle} from './Particle';
+import {ColoredParticle} from './ColoredParticle';
 
-export class LinkParticle extends Segment<Particle> implements IDraw {
-	public color: string = 'black';
+export class Link extends Segment<ColoredParticle> implements IDraw {
+	width: number = 2;
 	maxlength: number = 50;
 	get alpha() : number{
 		return Math.round((1 - this.length / this.maxlength) * 10) / 10;
 	}
 	get startColor(): string{
-		return `rgba(${this.start.red}, ${this.start.green}, ${this.start.blue}, ${ this.alpha })`;
+		return `hsla(${this.start.hue}, ${this.start.saturation}%, ${this.start.light}%, ${this.alpha})`;
 	}
 	get endColor(): string{
-		return `rgba(${this.end.red}, ${this.end.green}, ${this.end.blue}, ${ this.alpha })`;
+		return `hsla(${this.end.hue}, ${this.end.saturation}%, ${this.end.light}%, ${this.alpha})`;
 	}
 	draw(scene: CanvasScene) {
 		scene.ctx.save();
@@ -20,7 +20,7 @@ export class LinkParticle extends Segment<Particle> implements IDraw {
 		gradient.addColorStop(0, this.startColor);
 		gradient.addColorStop(1, this.endColor);
 		scene.ctx.strokeStyle =  gradient;
-		scene.ctx.lineWidth = 2;
+		scene.ctx.lineWidth = this.width;
 		scene.ctx.beginPath();
 		scene.ctx.moveTo(this.start.x, this.start.y);
 		scene.ctx.lineTo(this.end.x, this.end.y);

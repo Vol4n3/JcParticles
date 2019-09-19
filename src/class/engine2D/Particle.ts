@@ -1,48 +1,49 @@
-import {CanvasScene, IUpdate} from './CanvasScene';
 import {Position} from './Position';
+import {CanvasScene, IDraw, IUpdate} from './CanvasScene';
 
-export class Particle extends Position implements IUpdate {
-	radius: number = 1;
-	red: number = Math.round(Math.random()*255);
-	green: number = Math.round(Math.random()*255);
-	blue: number = Math.round(Math.random()*255);
+export class Particle extends Position implements IUpdate, IDraw {
+	bounceOnBox: boolean = false;
+	distanceDisappear = 50;
 
-	get color(): string {
-		return `rgb(${this.red},${this.green} ,${this.blue})`;
-	}
-
-	update(scene: CanvasScene) {
+	update(scene: CanvasScene): void {
 		this.move();
-		this.bounce('x', 'sup', scene.width);
-		this.bounce('x', 'inf', 0);
-		this.bounce('y', 'sup', scene.height);
-		this.bounce('y', 'inf', 0);
-	}
-
-	bounce(key: string, condition: 'inf' | 'sup', val: number) {
-		switch (condition) {
-			case 'inf':
-				if (this[key] < val) {
-					this[key] = val;
-					this.velocity[key] *= -1;
-				}
-				break;
-			case 'sup':
-				if (this[key] > val) {
-					this[key] = val;
-					this.velocity[key] *= -1;
-				}
-				break;
+		if (this.bounceOnBox) {
+			this.bounceBox('x', scene.width);
+			this.bounceBox('x', 0, true);
+			this.bounceBox('y', scene.height);
+			this.bounceBox('y', 0, true);
+		} else {
+			this.teleportBox('x', scene.width + this.distanceDisappear, -this.distanceDisappear);
+			this.teleportBox('x', -this.distanceDisappear, scene.width + this.distanceDisappear, true);
+			this.teleportBox('y', scene.height + this.distanceDisappear, -this.distanceDisappear);
+			this.teleportBox('y', -this.distanceDisappear, scene.height + this.distanceDisappear, true);
 		}
 	}
 
-	draw(scene: CanvasScene) {
+	teleportBox(key: string, val: number, goTo: number, isMinTest?: boolean): void {
+		const isExitBox: boolean = (isMinTest) ? this[key] < val : this[key] > val;
+		if (!isExitBox) {
+			return;
+		}
+		this[key] = goTo;
+	}
+
+	bounceBox(key: string, val: number, isMinTest?: boolean): void {
+		const isExitBox: boolean = (isMinTest) ? this[key] < val : this[key] > val;
+		if (!isExitBox) {
+			return;
+		}
+		this[key] = val;
+		this.velocity[key] *= -1;
+	}
+
+	draw(scene: CanvasScene): void {
 		scene.ctx.save();
-		scene.ctx.fillStyle = this.color;
 		scene.ctx.beginPath();
-		scene.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+		scene.ctx.arc(this.x, this.y, 1, 0, Math.PI * 2);
 		scene.ctx.fill();
 		scene.ctx.closePath();
 		scene.ctx.restore();
 	}
+
 }
