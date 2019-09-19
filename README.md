@@ -1,9 +1,22 @@
-#Particles Lib js
-##Example
+# Particles Lib js ##
+## Intro ##
+This lib is for make simple particles animations in canvas 2D js.
+## Goal ##
+* Simplify configurations
+* To be able to interact with particles
+* Increase options
+* Optimization with powerful algorithms
+* Support recent navigators
+* add lib on Npm repository
+* Write unit tests \o/
+## Test ##
+Tested in Chrome only for the moment
 
-* Imitation of particle.js https://vol4n3.github.io/JcParticles/example/01.html
+## Examples ##
 
-##Usage
+*  https://vol4n3.github.io/JcParticles/example/01.html
+
+## Usage ##
 
 **HTML**
 ```
@@ -16,19 +29,19 @@
 **JS**
 ```
   const instance = new JcParticle('particleContainer',{
-    // options
+    demoType: 'example01'
   });
 ```
-###**Options**
+## Options ##
 TODO
 
-##How to Contribute
+## How to Contribute ##
 
-_this project use Typescript for compile_
+_This project use Typescript Browserify and Uglify only for compile_
 
 * Clone the project
-* Install via Npm or Yarn
-* Build with npm run build
+* Install via Npm or Yarn with command ``npm run install``
+* Build with ``npm run build``
 * If you are ___not on windowsOS___ you can get an error, look on package.json for remove Temp folder script
 * Before pull request launch build the project and commit dist changes
 * you can watch files with your IDE (WebStorm) and auto run npm build command

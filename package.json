@@ -1,8 +1,9 @@
 {
   "name": "jcparticle",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "repository": "https://github.com/Vol4n3/JcParticles.git",
+  "description": "This lib is for make simple particles animations in canvas 2D js",
+  "main": "./dist/JcParticle.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && npm run browserify && npm run uglify && npm run winRemoveTemp",
@@ -10,9 +11,9 @@
     "uglify" : "uglifyjs ./temp/browserify/jcparticle.js -cm -o ./dist/JcParticle.js",
     "winRemoveTemp": "rd /s/q \"./temp\""
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
+  "author": "Vol4N3",
+  "license": "MIT",
+  "devDependencies": {
     "browserify": "^16.5.0",
     "typescript": "^3.6.2"
   }
