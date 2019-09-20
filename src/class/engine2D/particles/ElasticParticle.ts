@@ -4,12 +4,12 @@ import {Point} from '../../geometry2D/Point';
 
 export class ElasticParticle extends ColoredParticle {
 	bounceOnBox = true;
-	friction = new Point(0.1, 0.1);
+	friction = new Point(0.15, 0.15);
 
 	update(scene: CanvasScene): void {
 		super.update(scene);
 		if (this.returnToStart) {
-			this.velocity.add(new Point((this._startedPosition.x - this.x), (this._startedPosition.y - this.y)))
+			this.velocity.add(new Point((this._startedPosition.x - this.x) / 5, (this._startedPosition.y - this.y) / 5))
 		}
 	}
 

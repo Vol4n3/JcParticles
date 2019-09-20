@@ -57,7 +57,7 @@ class JcParticle {
 					particles.forEach((p) => {
 							if (p.inCircle(circle, true)) {
 								const vector: Vector = new Segment(circle, p).vector;
-								vector.length = circle.radius;
+								vector.length = circle.radius * 3;
 								p.velocity.add(vector.destination);
 								p.returnToStart = false;
 							} else {
