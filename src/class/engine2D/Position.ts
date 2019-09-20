@@ -23,10 +23,10 @@ export class Position extends Point implements IUpdate {
 		}
 	}
 
-	setTarget(targetPoint: Point,
-			  ticks: number,
-			  easing: (t: number, b: number, c: number, d: number) => number,
-			  callback?: () => void) {
+	startEasingTravel(targetPoint: Point,
+					  ticks: number,
+					  easing: (t: number, b: number, c: number, d: number) => number,
+					  callback?: () => void) {
 		this._targetPoint = targetPoint.copy();
 		this._easing = easing;
 		this._originPoint = this.copy();

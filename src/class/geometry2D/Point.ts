@@ -59,7 +59,11 @@ export class Point {
 		this.x = x;
 		this.y = y;
 	}
-	inCircle(circle: Circle){
+
+	inCircle(circle: Circle, strict?: boolean) {
+		if (strict) {
+			return (this.distanceTo(circle) - circle.radius) < 0;
+		}
 		return (this.distanceTo(circle) - circle.radius) <= 0;
 	}
 	moveTo(point: Point) {

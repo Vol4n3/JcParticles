@@ -1,8 +1,8 @@
 import {CanvasScene} from './CanvasScene';
 
 export class Interaction {
-	subscribesClick: (($event: MouseEvent) => {})[] = [];
-	subscribesHover: (($event: MouseEvent | TouchEvent) => {})[] = [];
+	subscribesClick: (($event: MouseEvent) => void)[] = [];
+	subscribesHover: (($event: MouseEvent) => void)[] = [];
 	private _refOnClick = this._OnClick.bind(this);
 	private _refOnHover = this._OnHover.bind(this);
 
@@ -22,7 +22,7 @@ export class Interaction {
 		});
 	}
 
-	private _OnHover($event: MouseEvent | TouchEvent) {
+	private _OnHover($event: MouseEvent) {
 		this.subscribesHover.forEach((sub) => {
 			sub($event);
 		});

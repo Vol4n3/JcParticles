@@ -14,8 +14,9 @@ Tested in Chrome only for the moment
 
 ## Examples ##
 
-*  https://vol4n3.github.io/JcParticles/example/01.html
-*  https://vol4n3.github.io/JcParticles/example/02.html
+*  https://vol4n3.github.io/JcParticles/example/linked-particles.html
+*  https://vol4n3.github.io/JcParticles/example/wave-line.html
+*  https://vol4n3.github.io/JcParticles/example/elastic-text.html
 
 ## Usage ##
 
