@@ -8,13 +8,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc && npm run browserify && npm run uglify && npm run winRemoveTemp",
     "browserify": "browserify ./temp/ts-out/index.js -o ./temp/browserify/jcparticle.js",
-    "uglify" : "uglifyjs ./temp/browserify/jcparticle.js -cm -o ./dist/JcParticle.js",
+    "uglify": "uglifyjs ./temp/browserify/jcparticle.js -cm -o ./dist/JcParticle.js",
     "winRemoveTemp": "rd /s/q \"./temp\""
   },
   "author": "Vol4N3",
   "license": "MIT",
   "devDependencies": {
     "browserify": "^16.5.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "uglify-js": "^3.6.0"
   }
 }
