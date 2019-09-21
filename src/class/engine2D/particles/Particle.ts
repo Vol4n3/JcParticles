@@ -1,49 +1,96 @@
 import {Position} from '../Position';
 import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
+import {Point} from '../../geometry2D/Point';
+
+
+export type MoveTypes = 'bounce' | 'teleport' | 'bounceX' | 'bounceY' | 'teleportX' | 'teleportY' | 'pinned'
 
 export class Particle extends Position implements IUpdate, IDraw {
-	bounceOnBox: boolean = false;
-	distanceDisappear = 50;
+    alpha: number = 1;
+    distanceTeleport = 50;
+    hue: number = 0;
+    light: number = 0;
+    moveTypes: MoveTypes[] = [];
+    radius: number = 1;
+    returnAtStarted: boolean;
+    saturation: number = 0;
+    protected _startedPosition: Point;
 
-	update(scene: CanvasScene): void {
-		super.update(scene);
-		if (this.bounceOnBox) {
-			this.bounceBox('x', scene.width);
-			this.bounceBox('x', 0, true);
-			this.bounceBox('y', scene.height);
-			this.bounceBox('y', 0, true);
-		} else {
-			this.teleportBox('x', scene.width + this.distanceDisappear, -this.distanceDisappear);
-			this.teleportBox('x', -this.distanceDisappear, scene.width + this.distanceDisappear, true);
-			this.teleportBox('y', scene.height + this.distanceDisappear, -this.distanceDisappear);
-			this.teleportBox('y', -this.distanceDisappear, scene.height + this.distanceDisappear, true);
-		}
-	}
+    get color(): string {
+        return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
+    }
 
-	teleportBox(key: string, val: number, goTo: number, isMinTest?: boolean): void {
-		const isExitBox: boolean = (isMinTest) ? this[key] < val : this[key] > val;
-		if (!isExitBox) {
-			return;
-		}
-		this[key] = goTo;
-	}
+    constructor(x: number = 0, y: number = 0) {
+        super(x, y);
+        this._startedPosition = this.copy();
+    }
 
-	bounceBox(key: string, val: number, isMinTest?: boolean): void {
-		const isExitBox: boolean = (isMinTest) ? this[key] < val : this[key] > val;
-		if (!isExitBox) {
-			return;
-		}
-		this[key] = val;
-		this.velocity[key] *= -1;
-	}
+    bounce(scene: CanvasScene) {
+        if (this.hasMoveType('bounce') || this.hasMoveType('bounceX')) {
+            this.bounceBox('x', scene.width - this.radius);
+            this.bounceBox('x', this.radius, true);
+        }
+        if (this.hasMoveType('bounce') || this.hasMoveType('bounceY')) {
+            this.bounceBox('y', scene.height - this.radius);
+            this.bounceBox('y', this.radius, true);
+        }
+    }
 
-	draw(scene: CanvasScene): void {
-		scene.ctx.save();
-		scene.ctx.beginPath();
-		scene.ctx.arc(this.x, this.y, 1, 0, Math.PI * 2);
-		scene.ctx.fill();
-		scene.ctx.closePath();
-		scene.ctx.restore();
-	}
+    bounceBox(key: string, val: number, isMinTest?: boolean): void {
+        const isExitBox: boolean = (isMinTest) ? this[key] < val : this[key] > val;
+        if (!isExitBox) {
+            return;
+        }
+        this[key] = val;
+        this.velocity[key] *= -1;
+    }
+
+    draw(scene: CanvasScene): void {
+        scene.ctx.save();
+        scene.ctx.fillStyle = this.color;
+        scene.ctx.beginPath();
+        scene.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        scene.ctx.fill();
+        scene.ctx.closePath();
+        scene.ctx.restore();
+    }
+
+    hasMoveType(mt: MoveTypes): boolean {
+        return this.moveTypes.indexOf(mt) > -1;
+    }
+
+    randomColor(): void {
+        this.hue = Math.round(Math.random() * 360);
+        this.saturation = Math.round(Math.random() * 100);
+        this.light = Math.round(Math.random() * 100);
+    }
+
+    teleport(scene: CanvasScene) {
+        if (this.hasMoveType('teleport') || this.hasMoveType('teleportX')) {
+            this.teleportBox('x', scene.width + this.distanceTeleport, -this.distanceTeleport);
+            this.teleportBox('x', -this.distanceTeleport, scene.width + this.distanceTeleport, true);
+        }
+        if (this.hasMoveType('teleport') || this.hasMoveType('teleportY')) {
+            this.teleportBox('y', scene.height + this.distanceTeleport, -this.distanceTeleport);
+            this.teleportBox('y', -this.distanceTeleport, scene.height + this.distanceTeleport, true);
+        }
+    }
+
+    teleportBox(key: string, val: number, goTo: number, isMinTest?: boolean): void {
+        const isExitBox: boolean = (isMinTest) ? this[key] < val : this[key] > val;
+        if (!isExitBox) {
+            return;
+        }
+        this[key] = goTo;
+    }
+
+    update(scene: CanvasScene): void {
+        super.update(scene);
+        this.bounce(scene);
+        this.teleport(scene);
+        if (this.returnAtStarted) {
+            this.velocity.add(new Point(this._startedPosition.x - this.x, this._startedPosition.y - this.y))
+        }
+    }
 
 }

@@ -1,16 +1,9 @@
-import {ColoredParticle} from './ColoredParticle';
 import {CanvasScene} from '../CanvasScene';
+import {Particle} from './Particle';
 
-export class WaveParticle extends ColoredParticle {
+export class WaveParticle extends Particle {
 	public speed = 0.04;
 	private _centerY: number;
-
-	constructor(x, y, private _maxHeight, private _increment) {
-		super(x, y);
-		this._centerY = y;
-		this.y = this._centerY + Math.cos(this._increment) * this._maxHeight;
-		this.randomColor();
-	}
 
 	get ellipseHeight() {
 		return this._centerY + this._maxHeight - this.y;
@@ -18,6 +11,13 @@ export class WaveParticle extends ColoredParticle {
 
 	get ellipseRotation() {
 		return (1 - this.ellipseHeight / this._maxHeight) * Math.PI / 12;
+	}
+
+	constructor(x, y, private _maxHeight, private _increment) {
+		super(x, y);
+		this._centerY = y;
+		this.y = this._centerY + Math.cos(this._increment) * this._maxHeight;
+		this.randomColor();
 	}
 
 	draw(scene: CanvasScene) {

@@ -1,12 +1,13 @@
-import {ColoredParticle} from '../particles/ColoredParticle';
 import {Link} from '../Link';
-import {CanvasScene, IDraw} from '../CanvasScene';
+import {CanvasScene} from '../CanvasScene';
 import {IMap} from './Map';
+import {Particle} from '../particles/Particle';
 
-export class LinkedParticlesMap implements IMap, IDraw {
+export class LinkedParticlesMap implements IMap {
 	update(scene: CanvasScene): void {
 	}
-	particles: ColoredParticle[] = [];
+
+	particles: Particle[] = [];
 	maxLinkLength: number = 100;
 
 	constructor(private _scene: CanvasScene, private _particlesNumber: number) {
@@ -16,9 +17,10 @@ export class LinkedParticlesMap implements IMap, IDraw {
 	}
 
 	addParticle() {
-		const p = new ColoredParticle(Math.random() * this._scene.width, Math.random() * this._scene.height);
+		const p = new Particle(Math.random() * this._scene.width, Math.random() * this._scene.height);
 		p.radius = Math.round(Math.random() * 2 + 1);
 		p.velocity.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
+		p.moveTypes = ['bounce'];
 		p.randomColor();
 		this.particles.push(p);
 	}

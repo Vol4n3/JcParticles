@@ -1,8 +1,9 @@
 import {Particle} from '../particles/Particle';
-import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
+import {CanvasScene} from '../CanvasScene';
 import {WaveParticle} from '../particles/WaveParticle';
+import {IMap} from './Map';
 
-export class ColoredWaveMap implements IDraw, IUpdate {
+export class ColoredWaveMap implements IMap {
 	particles: Particle[] = [];
 
 	constructor(private _scene: CanvasScene) {

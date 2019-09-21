@@ -3,10 +3,11 @@ import {LinkedParticlesMap} from './class/engine2D/maps/LinkedParticlesMap';
 import {IMap} from './class/engine2D/maps/Map';
 import {ColoredWaveMap} from './class/engine2D/maps/ColoredWaveMap';
 import {TextToParticle} from './class/engine2D/textToParticle';
-import {ElasticParticle} from './class/engine2D/particles/ElasticParticle';
 import {Circle} from './class/geometry2D/Circle';
 import {Vector} from './class/geometry2D/Vector';
 import {Segment} from './class/geometry2D/Segment';
+import {Point} from './class/geometry2D/Point';
+import {Particle} from './class/engine2D/particles/Particle';
 
 interface IOptions {
 	demoType?: 'example01' | 'example02' | 'example03';
@@ -27,7 +28,7 @@ class JcParticle {
 	initExample() {
 		switch (this._options.demoType) {
 			case 'example01':
-				this.map = new LinkedParticlesMap(this.scene, 70);
+                this.map = new LinkedParticlesMap(this.scene, 120);
 				this.scene.draws.push(...this.map.particles);
 				this.scene.updates.push(...this.map.particles);
 				this.scene.draws.push(this.map);
@@ -41,11 +42,13 @@ class JcParticle {
 				// todo : Refacto this
 				const TTP = new TextToParticle();
 				const points = TTP.getPoints("Hello world");
-				const particles: ElasticParticle[] = [];
+                const particles: Particle[] = [];
 				points.forEach((p) => {
-					const ep: ElasticParticle = new ElasticParticle(p.x * 6, p.y * 6);
+                    const ep: Particle = new Particle(p.x * 6, p.y * 6);
 					ep.radius = Math.round(Math.random() * 3 + 1);
 					ep.randomColor();
+                    ep.returnAtStarted = true;
+                    ep.friction = new Point(0.15, 0.15);
 					ep.translate(Math.random() * this.scene.width, Math.random() * this.scene.height);
 					particles.push(ep);
 				});
@@ -59,9 +62,9 @@ class JcParticle {
 								const vector: Vector = new Segment(circle, p).vector;
 								vector.length = circle.radius * 3;
 								p.velocity.add(vector.destination);
-								p.returnToStart = false;
+                                p.returnAtStarted = false;
 							} else {
-								p.returnToStart = true;
+                                p.returnAtStarted = true;
 							}
 						}
 					)
