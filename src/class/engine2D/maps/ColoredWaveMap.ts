@@ -14,6 +14,7 @@ export class ColoredWaveMap implements IMap {
 			const y = this._scene.height / 2;
 			const p = new WaveParticle(x, y, maxHeight, i * 0.35);
 			this.particles.push(p);
+            this._scene.draws.push(...this.particles);
 		}
 
 	}

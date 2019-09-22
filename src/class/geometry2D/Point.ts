@@ -75,6 +75,11 @@ export class Point {
 		this.y += point.y;
 	}
 
+	copyAdd(point: Point): Point {
+		const p = this.copy();
+		p.add(point);
+		return p;
+	}
 	multiply(point: Point) {
 		this.x *= point.x;
 		this.y *= point.y;

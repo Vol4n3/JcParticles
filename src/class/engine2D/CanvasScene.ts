@@ -31,7 +31,6 @@ export class CanvasScene {
 		this.container = document.getElementById(containerId);
 		this.ctx = this.canvas.getContext('2d');
 		this.canvas.style.display = 'block';
-		this.ctx.imageSmoothingEnabled = true;
 		this.container.appendChild(this.canvas);
 		window.addEventListener('resize', this._resizeRef);
 		this.resize();

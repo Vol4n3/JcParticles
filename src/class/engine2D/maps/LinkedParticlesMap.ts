@@ -23,6 +23,8 @@ export class LinkedParticlesMap implements IMap {
 		p.moveTypes = ['bounce'];
 		p.randomColor();
 		this.particles.push(p);
+        this._scene.draws.push(p);
+        this._scene.updates.push(p);
 	}
 
 	draw(game: CanvasScene): void {

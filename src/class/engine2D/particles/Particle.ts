@@ -1,9 +1,18 @@
 import {Position} from '../Position';
 import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
 import {Point} from '../../geometry2D/Point';
+import {MathUtils} from '../Math/Utils';
 
 
-export type MoveTypes = 'bounce' | 'teleport' | 'bounceX' | 'bounceY' | 'teleportX' | 'teleportY' | 'pinned'
+export type MoveTypes =
+    'bounce'
+    | 'teleport'
+    | 'bounceX'
+    | 'bounceY'
+    | 'teleportX'
+    | 'teleportY'
+    | 'pinned'
+    | 'vibration'
 
 export class Particle extends Position implements IUpdate, IDraw {
     alpha: number = 1;
@@ -14,10 +23,15 @@ export class Particle extends Position implements IUpdate, IDraw {
     radius: number = 1;
     returnAtStarted: boolean;
     saturation: number = 0;
+    vibrationStrength: number = 10;
     protected _startedPosition: Point;
 
     get color(): string {
-        return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
+        if (this.alpha === 1) {
+            return `hsl(${this.hue},${this.saturation}%,${this.light}%)`;
+        } else {
+            return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
+        }
     }
 
     constructor(x: number = 0, y: number = 0) {
@@ -84,13 +98,35 @@ export class Particle extends Position implements IUpdate, IDraw {
         this[key] = goTo;
     }
 
+    attractTo(p: Point) {
+        this.velocity.add(new Point(p.x - this.x, p.y - this.y))
+    }
+
+    randomPropulsion(strength) {
+        this.velocity.add(new Point(
+            MathUtils.randomRange(strength),
+            MathUtils.randomRange(strength)
+        ))
+    }
+
     update(scene: CanvasScene): void {
         super.update(scene);
         this.bounce(scene);
         this.teleport(scene);
+        this.vibration();
         if (this.returnAtStarted) {
-            this.velocity.add(new Point(this._startedPosition.x - this.x, this._startedPosition.y - this.y))
+            this.attractTo(this._startedPosition);
         }
     }
 
+    vibration() {
+        if (!this.hasMoveType('vibration')) {
+            return;
+        }
+        if (Math.random() > 0.5) {
+            this.randomPropulsion(this.vibrationStrength);
+        } else {
+            this.attractTo(this._startedPosition);
+        }
+    }
 }

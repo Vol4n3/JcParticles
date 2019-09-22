@@ -1,21 +1,32 @@
 import {Point} from './Point';
+import {Segment} from './Segment';
 
 export class Vector {
-	constructor(public destination: Point = new Point(), public origin: Point = new Point()) {
-
-	}
-	get length(): number {
-		return this.origin.distanceTo(this.destination);
-	}
+	protected readonly _origin: Point = new Point();
 
 	get angle(): number {
-		return this.origin.angleTo(this.destination);
+		return this._origin.angleTo(this.destination);
 	}
 
 	set angle(angle: number) {
-		this.destination.rotateAround(this.origin, angle);
+		this.destination.rotateAround(this._origin, angle);
 	}
 
+	get length(): number {
+		return this._origin.distanceTo(this.destination);
+	}
+
+	constructor(public destination: Point = new Point()) {
+
+	}
+
+	copy() {
+		return new Vector(this.destination);
+	}
+
+	makeSegmentFrom(origin: Point): Segment<Point> {
+		return new Segment<Point>(origin.copy(), origin.copyAdd(this.destination));
+	}
 	set length(length: number) {
 		const a = this.angle;
 		this.destination.translate(
