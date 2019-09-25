@@ -8,7 +8,7 @@ export class LinkedParticlesMap implements IMap {
 	}
 
 	particles: Particle[] = [];
-	maxLinkLength: number = 100;
+	maxLinkLength: number = 70;
 
 	constructor(private _scene: CanvasScene, private _particlesNumber: number) {
 		for (let i = 0; i < this._particlesNumber; i++) {
@@ -40,5 +40,8 @@ export class LinkedParticlesMap implements IMap {
 				lp.draw(game);
 			}
 		}
+	}
+
+	drawGl(scene: CanvasScene): void {
 	}
 }

@@ -2,52 +2,45 @@ import {IMap} from './Map';
 import {Particle} from '../particles/Particle';
 import {CanvasScene} from '../CanvasScene';
 import {Vector} from '../../geometry2D/Vector';
-import {Point} from '../../geometry2D/Point';
-import {PerlinNoise} from '../PerlinNoise';
 
 export class VelocityMap implements IMap {
-    particles: Particle[];
-    poisson: Particle;
-    velocityGrid: Vector[] = [];
+	particles: Particle[] = [];
+	velocityGrid: Vector[] = [];
 
-    constructor(private _scene: CanvasScene) {
-        const perlin = new PerlinNoise();
-        for (let y = 0; y < this._scene.height; y += 20) {
-            for (let x = 0; x < this._scene.width; x += 20) {
-                const perlinValue = ((perlin.noise2D(x, y) + 1) / 2) * Math.PI * 2;
-                console.log(perlinValue);
-                const vector = new Vector(new Point(5, 0));
-                vector.angle = perlinValue;
-                this.velocityGrid.push(vector);
-                this._scene.draws.push(vector.makeSegmentFrom(new Point(x, y)));
-            }
-        }
-        console.log(this.velocityGrid.length);
-        this.poisson = new Particle(20, 20);
-        this.poisson.moveTypes.push('bounce');
-        this.poisson.friction = new Point(0.95, 0.95);
-        this.poisson.radius = 10;
-        this.poisson.maxVelocity = 5;
-        this._scene.draws.push(this.poisson);
-        this._scene.updates.push(this.poisson);
-    }
+	constructor(private _scene: CanvasScene) {
+		for (let p = 0; p < 20; p++) {
+			const fish = new Particle(Math.random() * this._scene.width, Math.random() * this._scene.height);
+			fish.moveTypes.push('teleport', 'randomWalk');
+			fish.maxVelocity = 3;
+			fish.radius = 5;
+			this._scene.draws.push(fish);
+			this._scene.updates.push(fish);
+			this.particles.push(fish);
+		}
+	}
 
-    draw(scene: CanvasScene): void {
-    }
+	draw(scene: CanvasScene): void {
+	}
 
-    getNearFlow(x: number, y: number): Vector {
-        const roundedX = Math.round(x / 20);
-        const roundedY = Math.round(y / 20);
-        const index = roundedX + Math.round(this._scene.width / 20) * roundedY;
-        return this.velocityGrid[index];
-    }
+	drawGl(scene: CanvasScene): void {
 
-    update(scene: CanvasScene): void {
-        const goMove = this.getNearFlow(this.poisson.x, this.poisson.y);
+	}
 
-        if (goMove) {
-            this.poisson.velocity.add(goMove.destination);
-        }
-    }
+	getNearFlow(x: number, y: number): Vector {
+		const roundedX = Math.round(x / 20);
+		const roundedY = Math.round(y / 20);
+		const index = roundedX + Math.round(this._scene.width / 20) * roundedY;
+		return this.velocityGrid[index];
+	}
 
+	update(scene: CanvasScene): void {
+		for (let p = 1; p < this.particles.length; p++) {
+			const distance = this.particles[p].distanceTo(this.particles[0]);
+			if (distance > 3 && distance < 100) {
+				if (Math.random() > 0.8) {
+					this.particles[p].velocity.add(this.particles[0].velocity);
+				}
+			}
+		}
+	}
 }

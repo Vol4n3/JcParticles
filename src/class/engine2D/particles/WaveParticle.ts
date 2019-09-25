@@ -2,7 +2,7 @@ import {CanvasScene} from '../CanvasScene';
 import {Particle} from './Particle';
 
 export class WaveParticle extends Particle {
-	public speed = 0.04;
+	public speed = 0.06;
 	private _centerY: number;
 
 	get ellipseHeight() {
@@ -21,13 +21,11 @@ export class WaveParticle extends Particle {
 	}
 
 	draw(scene: CanvasScene) {
-		scene.ctx.save();
 		scene.ctx.fillStyle = this.color;
 		scene.ctx.beginPath();
-		scene.ctx.ellipse(this.x, this._centerY, 3, this.ellipseHeight, this.ellipseRotation, 0, Math.PI * 2);
+		scene.ctx.ellipse(this.x, this._centerY, 4, this.ellipseHeight, this.ellipseRotation, 0, Math.PI * 2);
 		scene.ctx.fill();
 		scene.ctx.closePath();
-		scene.ctx.restore();
 	}
 
 	update(scene: CanvasScene): void {

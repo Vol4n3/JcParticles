@@ -3,6 +3,8 @@ import {CanvasScene, IDraw} from './CanvasScene';
 import {Particle} from './particles/Particle';
 
 export class Link extends Segment<Particle> implements IDraw {
+	drawGl(scene: CanvasScene): void {
+	}
 	width: number = 2;
 	maxlength: number = 50;
 	get alpha() : number{
@@ -15,7 +17,6 @@ export class Link extends Segment<Particle> implements IDraw {
 		return `hsla(${this.end.hue}, ${this.end.saturation}%, ${this.end.light}%, ${this.alpha})`;
 	}
 	draw(scene: CanvasScene) {
-		scene.ctx.save();
 		const gradient = scene.ctx.createLinearGradient(this.start.x,this.start.y,this.end.x,this.end.y);
 		gradient.addColorStop(0, this.startColor);
 		gradient.addColorStop(1, this.endColor);
@@ -26,6 +27,5 @@ export class Link extends Segment<Particle> implements IDraw {
 		scene.ctx.lineTo(this.end.x, this.end.y);
 		scene.ctx.stroke();
 		scene.ctx.closePath();
-		scene.ctx.restore();
 	}
 }

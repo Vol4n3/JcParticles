@@ -4,11 +4,9 @@ import {WaveParticle} from '../particles/WaveParticle';
 import {IMap} from './Map';
 
 export class ColoredWaveMap implements IMap {
-	particles: Particle[] = [];
-
 	constructor(private _scene: CanvasScene) {
-		const particleNumber = 50;
-		const maxHeight = 45;
+		const particleNumber = 30;
+		const maxHeight = 40;
 		for (let i = 1; i < particleNumber; i++) {
 			const x = (i / particleNumber) * this._scene.width;
 			const y = this._scene.height / 2;
@@ -17,6 +15,11 @@ export class ColoredWaveMap implements IMap {
             this._scene.draws.push(...this.particles);
 		}
 
+	}
+
+	particles: Particle[] = [];
+
+	drawGl(scene: CanvasScene): void {
 	}
 
 	update(scene: CanvasScene): void {

@@ -16,13 +16,14 @@ export class Segment<T extends Point> implements IDraw {
 	}
 
 	draw(scene: CanvasScene): void {
-		scene.ctx.save();
 		scene.ctx.beginPath();
 		scene.ctx.moveTo(this.start.x, this.start.y);
 		scene.ctx.lineTo(this.end.x, this.end.y);
 		scene.ctx.stroke();
 		scene.ctx.closePath();
-		scene.ctx.restore();
+	}
+
+	drawGl(scene: CanvasScene): void {
 	}
 
 }

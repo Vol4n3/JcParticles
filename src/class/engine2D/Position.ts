@@ -5,7 +5,7 @@ import {CanvasScene, IUpdate} from './CanvasScene';
 export class Position extends Point implements IUpdate {
 	friction: Point = new Point(1, 1);
 	velocity: Point = new Point(0, 0);
-	maxVelocity: number = 10;
+	maxVelocity: number = 0;
 	protected _time: number;
 	protected _easing: (t: number, b: number, c: number, d: number) => number;
 	protected _targetPoint: Point;
@@ -16,10 +16,12 @@ export class Position extends Point implements IUpdate {
 
 	update(scene: CanvasScene): void {
 		if (!this._isTargeting) {
-			this.velocity.x = (this.velocity.x > this.maxVelocity) ? this.maxVelocity : this.velocity.x;
-			this.velocity.x = (this.velocity.x < -this.maxVelocity) ? -this.maxVelocity : this.velocity.x;
-			this.velocity.y = (this.velocity.y > this.maxVelocity) ? this.maxVelocity : this.velocity.y;
-			this.velocity.y = (this.velocity.y < -this.maxVelocity) ? -this.maxVelocity : this.velocity.y;
+			if (this.maxVelocity > 0) {
+				this.velocity.x = (this.velocity.x > this.maxVelocity) ? this.maxVelocity : this.velocity.x;
+				this.velocity.x = (this.velocity.x < -this.maxVelocity) ? -this.maxVelocity : this.velocity.x;
+				this.velocity.y = (this.velocity.y > this.maxVelocity) ? this.maxVelocity : this.velocity.y;
+				this.velocity.y = (this.velocity.y < -this.maxVelocity) ? -this.maxVelocity : this.velocity.y;
+			}
 			this.velocity.multiply(this.friction);
 			this.add(this.velocity);
 		} else {
