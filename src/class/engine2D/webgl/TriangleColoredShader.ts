@@ -8,7 +8,11 @@ export interface IShaderTransform {
 }
 
 export class TriangleColoredShader {
-	program: WebGLProgram;
+	private _program: WebGLProgram;
+	private _vertexShader: WebGLShader;
+	private _fragmentShader: WebGLShader;
+	private _positionBuffer: WebGLBuffer;
+	private _colorBuffer: WebGLBuffer;
 
 	constructor(private readonly _scene: CanvasScene, private readonly _vertices: number[]) {
 		this.init();
@@ -47,11 +51,11 @@ void main() {
 	}
 
 	getAttributeLocationBy(key: string): number {
-		return this._scene.gl.getAttribLocation(this.program, key);
+		return this._scene.gl.getAttribLocation(this._program, key);
 	}
 
 	getUniformLocationBy(key: string): WebGLUniformLocation {
-		return this._scene.gl.getUniformLocation(this.program, key);
+		return this._scene.gl.getUniformLocation(this._program, key);
 	}
 
 	createShader(type: GLenum, source: string): WebGLShader {
@@ -80,51 +84,20 @@ void main() {
 		this._scene.gl.deleteProgram(program);
 	}
 
-	init(): void {
-		const vertex = this.createShader(this._scene.gl.VERTEX_SHADER, this.vertex);
-		const fragment = this.createShader(this._scene.gl.FRAGMENT_SHADER, this.fragment);
-		this.program = this.createProgram(vertex, fragment);
-		// buffer
-		// geometry position
-		const positionBuffer = this._scene.gl.createBuffer();
-		this._scene.gl.bindBuffer(this._scene.gl.ARRAY_BUFFER, positionBuffer);
-		this._scene.gl.bufferData(this._scene.gl.ARRAY_BUFFER,
-			new Float32Array(this._vertices), this._scene.gl.STATIC_DRAW);
-		const aPosition = this.getAttributeLocationBy('a_position');
-		this._scene.gl.enableVertexAttribArray(aPosition);
-		this._scene.gl.vertexAttribPointer(aPosition, 2,
-			this._scene.gl.FLOAT, false, 0, 0);
-		// color
-		const colorBuffer = this._scene.gl.createBuffer();
-		this._scene.gl.bindBuffer(this._scene.gl.ARRAY_BUFFER, colorBuffer);
-		this._scene.gl.bufferData(
-			this._scene.gl.ARRAY_BUFFER,
-			this.setColors(),
-			this._scene.gl.STATIC_DRAW);
-		const aColor = this.getAttributeLocationBy('a_color');
-		this._scene.gl.enableVertexAttribArray(aColor);
-		this._scene.gl.vertexAttribPointer(aColor, 4,
-			this._scene.gl.FLOAT, false, 0, 0);
-
-		this.drawGl({
-			position: {x: 0, y: 0},
-			rotation: {angle: 0, x: 0, y: 0},
-			scale: {x: 1, y: 1}
-		});
+	destroy() {
+		this._scene.gl.deleteProgram(this._program);
+		this._scene.gl.deleteShader(this._fragmentShader);
+		this._scene.gl.deleteShader(this._vertexShader);
+		this._scene.gl.deleteBuffer(this._positionBuffer);
+		this._scene.gl.deleteBuffer(this._colorBuffer);
 	}
 
-	setColors(): Float32Array {
-		return new Float32Array(
-			[
-				1, 0, 0, 1,
-				1, 0, 0, 1,
-				0, 0, 1, 1,
-				0, 0, 1, 1
-			]);
+	randomColor() {
+		return [Math.random(), Math.random(), Math.random(), 1]
 	}
 
 	drawGl(transform: IShaderTransform) {
-		this._scene.gl.useProgram(this.program);
+		this._scene.gl.useProgram(this._program);
 		const matrix = new Matrix3()
 			.project(this._scene.width, this._scene.height)
 			.translate(transform.position.x, transform.position.y)
@@ -133,6 +106,37 @@ void main() {
 			.translate(transform.rotation.x, transform.rotation.y);
 
 		this._scene.gl.uniformMatrix3fv(this.getUniformLocationBy('u_matrix'), false, matrix.data);
-		this._scene.gl.drawArrays(this._scene.gl.TRIANGLE_STRIP, 0, this._vertices.length / 2);
+		this._scene.gl.drawArrays(this._scene.gl.TRIANGLE_FAN, 0, this._vertices.length / 2);
+	}
+
+	private init(): void {
+		this._vertexShader = this.createShader(this._scene.gl.VERTEX_SHADER, this.vertex);
+		this._fragmentShader = this.createShader(this._scene.gl.FRAGMENT_SHADER, this.fragment);
+		this._program = this.createProgram(this._vertexShader, this._fragmentShader);
+		// buffer
+		// geometry position
+		this._positionBuffer = this._scene.gl.createBuffer();
+		this._scene.gl.bindBuffer(this._scene.gl.ARRAY_BUFFER, this._positionBuffer);
+		this._scene.gl.bufferData(this._scene.gl.ARRAY_BUFFER,
+			new Float32Array(this._vertices), this._scene.gl.STATIC_DRAW);
+		const aPosition = this.getAttributeLocationBy('a_position');
+		this._scene.gl.enableVertexAttribArray(aPosition);
+		this._scene.gl.vertexAttribPointer(aPosition, 2,
+			this._scene.gl.FLOAT, false, 0, 0);
+		// color
+		this._colorBuffer = this._scene.gl.createBuffer();
+		this._scene.gl.bindBuffer(this._scene.gl.ARRAY_BUFFER, this._colorBuffer);
+		const colors = [];
+		for (let i: number = 0; i < this._vertices.length / 2; i++) {
+			colors.push(...this.randomColor());
+		}
+		this._scene.gl.bufferData(
+			this._scene.gl.ARRAY_BUFFER,
+			new Float32Array(colors),
+			this._scene.gl.STATIC_DRAW);
+		const aColor = this.getAttributeLocationBy('a_color');
+		this._scene.gl.enableVertexAttribArray(aColor);
+		this._scene.gl.vertexAttribPointer(aColor, 4,
+			this._scene.gl.FLOAT, false, 0, 0);
 	}
 }

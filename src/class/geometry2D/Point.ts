@@ -5,6 +5,7 @@ export class Point {
 	constructor(public x = 0, public y = 0) {
 
 	}
+
 	angleTo(p: Point): number {
 		return Math.atan2(p.y - this.y, p.x - this.x);
 	}
@@ -24,6 +25,35 @@ export class Point {
 		return new Point(this.x, this.y);
 	}
 
+	makePolygon(face: number, radius: number, startAngle = 0): Point[] {
+		const points = [];
+		if (face < 3) {
+			face = 3
+		}
+		let centerAng = 2 * Math.PI / face;
+		for (let i = 0; i < face; i++) {
+			const ang = startAngle + (i * centerAng);
+			const vx = this.x + radius * Math.cos(ang);
+			const vy = this.y - radius * Math.sin(ang);
+			points.push(new Point(vx, vy));
+		}
+		return points
+	}
+
+	makePolygonVertices(face: number, radius: number, startAngle = 0): number[] {
+		const points = [];
+		if (face < 3) {
+			face = 3
+		}
+		let centerAng = 2 * Math.PI / face;
+		for (let i = 0; i < face; i++) {
+			const ang = startAngle + (i * centerAng);
+			const vx = this.x + radius * Math.cos(ang);
+			const vy = this.y - radius * Math.sin(ang);
+			points.push(vx, vy);
+		}
+		return points
+	}
 	roundedCopy(n = 1): Point {
 		return new Point(Math.round(this.x * n) / n, Math.round(this.y * n) / n);
 	}
@@ -66,6 +96,7 @@ export class Point {
 		}
 		return (this.distanceTo(circle) - circle.radius) <= 0;
 	}
+
 	moveTo(point: Point) {
 		this.translate(point.x, point.y);
 	}
@@ -80,6 +111,7 @@ export class Point {
 		p.add(point);
 		return p;
 	}
+
 	multiply(point: Point) {
 		this.x *= point.x;
 		this.y *= point.y;

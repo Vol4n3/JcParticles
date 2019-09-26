@@ -1,4 +1,4 @@
-import {Position} from '../Position';
+import {PositionPoint} from '../PositionPoint';
 import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
 import {Point} from '../../geometry2D/Point';
 import {MathUtils} from '../Math/Utils';
@@ -16,7 +16,7 @@ export type MoveTypes =
 	| 'vibration'
 	| 'randomWalk'
 
-export class Particle extends Position implements IUpdate, IDraw {
+export class Particle extends PositionPoint implements IUpdate, IDraw {
 	alpha: number = 1;
 	distanceTeleport = 50;
 	hue: number = 0;
