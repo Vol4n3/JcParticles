@@ -3,7 +3,6 @@ import {Interaction} from './Interaction';
 
 export interface IDraw {
 	draw(scene: CanvasScene): void;
-
 	drawGl(scene: CanvasScene): void;
 }
 
@@ -70,7 +69,7 @@ export class CanvasScene {
 		if (!this.useGL) {
 			this.ctx.clearRect(0, 0, this.width, this.height);
 		} else {
-			// this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+			this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 		}
 		this.draws.forEach((item) => {
 			if (this.useGL) {
