@@ -7,6 +7,7 @@
   "scripts": {
     "test": "jest",
     "test-watch": "jest --watch",
+    "coverage": "jest --coverage",
     "build": "tsc && npm run browserify && npm run uglify && npm run winRemoveTemp",
     "browserify": "browserify ./temp/ts-out/index.js -o ./temp/browserify/jcparticle.js",
     "uglify": "uglifyjs ./temp/browserify/jcparticle.js -cm -o ./dist/JcParticle.js",

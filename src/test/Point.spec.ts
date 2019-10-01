@@ -41,4 +41,19 @@ describe('Point', () => {
 		expect(point2.inRectangle(rect2)).toBe(true);
 
 	});
+	test('should be make copy', () => {
+		const point = new Point(1, 1);
+		const copy = point.copy();
+		expect(point).toBe(point);
+		expect(point).not.toBe(copy);
+		expect(point).toEqual(copy);
+		copy.x = 2;
+		expect(point).not.toEqual(copy);
+	});
+	test('should be make a polygon', () => {
+		const center = new Point(0, 0);
+		const triangle = center.makePolygonPoints(3, 3);
+
+		expect(triangle.length).toBe(3);
+	});
 });

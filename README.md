@@ -8,7 +8,7 @@ This lib is for make simple particles animations in canvas 2D js.
 * Optimization with powerful algorithms
 * Support recent navigators
 * add lib on Npm repository
-* Write unit tests \o/
+* Write unit tests \o/ (in progress)
 ## Test ##
 Tested in Chrome only for the moment
 

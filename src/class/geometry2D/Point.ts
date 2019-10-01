@@ -1,5 +1,6 @@
 import {Rectangle} from './Rectangle';
 import {Circle} from './Circle';
+import {MathUtils} from '../engine2D/Math/Utils';
 
 export class Point {
 	constructor(public x: number = 0, public y: number = 0) {
@@ -25,7 +26,7 @@ export class Point {
 		return new Point(this.x, this.y);
 	}
 
-	makePolygon(face: number, radius: number, startAngle = 0): Point[] {
+	makePolygonPoints(face: number, radius: number, startAngle = 0): Point[] {
 		const points = [];
 		if (face < 3) {
 			face = 3
@@ -40,6 +41,9 @@ export class Point {
 		return points
 	}
 
+	/**
+	 * @deprecated
+	 */
 	makePolygonVertices(face: number, radius: number, startAngle = 0): number[] {
 		const points = [];
 		if (face < 3) {
@@ -54,8 +58,9 @@ export class Point {
 		}
 		return points
 	}
+
 	roundedCopy(n = 1): Point {
-		return new Point(Math.round(this.x * n) / n, Math.round(this.y * n) / n);
+		return new Point(MathUtils.round(this.x, n), MathUtils.round(this.y, n));
 	}
 
 	inTriangle(p1: Point, p2: Point, p3: Point, strict: boolean): boolean {
