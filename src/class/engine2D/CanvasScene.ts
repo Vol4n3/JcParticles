@@ -51,12 +51,6 @@ export class CanvasScene {
 		this.interaction = new Interaction(this);
 	}
 
-	loop() {
-		this.updates.forEach((item) => {
-			item.update(this);
-		})
-	}
-
 	get height(): number {
 		return this.container.clientHeight;
 	}
@@ -65,11 +59,17 @@ export class CanvasScene {
 		return this.container.clientWidth;
 	}
 
+	loop() {
+		this.updates.forEach((item) => {
+			item.update(this);
+		})
+	}
+
 	animate(): void {
-		if (!this.useGL) {
-			this.ctx.clearRect(0, 0, this.width, this.height);
-		} else {
+		if (this.useGL) {
 			this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+		} else {
+			this.ctx.clearRect(0, 0, this.width, this.height);
 		}
 		this.draws.forEach((item) => {
 			if (this.useGL) {

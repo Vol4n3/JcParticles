@@ -3,9 +3,6 @@ import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
 import {Point} from '../../geometry2D/Point';
 import {MathUtils} from '../Math/Utils';
 import {Vector} from '../../geometry2D/Vector';
-import {TriangleColoredShader} from '../webgl/TriangleColoredShader';
-import {ColorMat4} from '../webgl/ColorMat4';
-import {Color} from '../Color';
 
 
 export type MoveTypes =
@@ -31,15 +28,11 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 	returnAtStarted: boolean;
 	saturation: number = 0;
 	vibrationStrength: number = 5;
-	shader: TriangleColoredShader;
 	protected _startedPosition: Point;
 
 	constructor(x: number = 0, y: number = 0) {
 		super(x, y);
 		this._startedPosition = this.copy();
-		const center = new Point();
-		const polygonVertices = center.makePolygonVertices(12, 1);
-		this.shader = new TriangleColoredShader(polygonVertices);
 	}
 
 	get color(): string {
@@ -79,21 +72,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 	}
 
 	drawGl(scene: CanvasScene): void {
-		const color = new ColorMat4();
-		color.setColor(Color.fromHSLA(this.hue, this.saturation, this.light, this.alpha), 0);
-		this.shader.drawGl(scene.gl, {
-			width: scene.width,
-			height: scene.height,
-			rotation: {angle: 0, y: 0, x: 0},
-			scale: {
-				x: this.radius,
-				y: this.radius
-			},
-			position: {
-				x: this.x,
-				y: this.y
-			}
-		}, color)
+
 	}
 
 	hasMoveType(mt: MoveTypes): boolean {

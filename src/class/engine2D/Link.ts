@@ -11,9 +11,15 @@ export class Link extends Segment<Particle> implements IDraw {
 		return Math.round((1 - this.length / this.maxlength) * 10) / 10;
 	}
 	get startColor(): string{
+		if (this.alpha >= 1) {
+			return `hsl(${this.start.hue}, ${this.start.saturation}%, ${this.start.light}%)`;
+		}
 		return `hsla(${this.start.hue}, ${this.start.saturation}%, ${this.start.light}%, ${this.alpha})`;
 	}
 	get endColor(): string{
+		if (this.alpha >= 1) {
+			return `hsl(${this.end.hue}, ${this.end.saturation}%, ${this.end.light}%)`;
+		}
 		return `hsla(${this.end.hue}, ${this.end.saturation}%, ${this.end.light}%, ${this.alpha})`;
 	}
 	draw(scene: CanvasScene) {

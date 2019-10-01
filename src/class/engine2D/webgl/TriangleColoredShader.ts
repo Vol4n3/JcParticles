@@ -9,6 +9,7 @@ export interface IShaderTransform {
 	scale: { x: number, y: number }
 }
 
+// WIP: This is not optimized
 export class TriangleColoredShader {
 	private _program: WebGLProgram;
 	private _vertexShader: WebGLShader;
