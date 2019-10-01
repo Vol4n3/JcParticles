@@ -2,7 +2,7 @@ import {Rectangle} from './Rectangle';
 import {Circle} from './Circle';
 
 export class Point {
-	constructor(public x = 0, public y = 0) {
+	constructor(public x: number = 0, public y: number = 0) {
 
 	}
 

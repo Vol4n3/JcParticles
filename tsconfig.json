@@ -4,9 +4,18 @@
         "module": "commonjs",
         "sourceMap": false,
         "outDir": "./temp/ts-out",
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "lib": [
+            "es6",
+            "dom",
+            "es5"
+        ]
     },
     "include": [
         "src/**/*.ts"
+    ],
+    "exclude": [
+        "**/*.spec.ts",
+        "**/*.test.ts"
     ]
 }

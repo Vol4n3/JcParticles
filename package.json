@@ -5,7 +5,8 @@
   "description": "This lib is for make simple particles animations in canvas 2D js",
   "main": "./dist/JcParticle.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
+    "test-watch": "jest --watch",
     "build": "tsc && npm run browserify && npm run uglify && npm run winRemoveTemp",
     "browserify": "browserify ./temp/ts-out/index.js -o ./temp/browserify/jcparticle.js",
     "uglify": "uglifyjs ./temp/browserify/jcparticle.js -cm -o ./dist/JcParticle.js",
@@ -14,7 +15,10 @@
   "author": "Vol4N3",
   "license": "MIT",
   "devDependencies": {
+    "@types/jest": "^24.0.18",
     "browserify": "^16.5.0",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.1.0",
     "typescript": "^3.6.2",
     "uglify-js": "^3.6.0"
   }
