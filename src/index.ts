@@ -2,7 +2,7 @@ import {CanvasScene} from './class/engine2D/CanvasScene';
 import {LinkedParticlesMap} from './class/engine2D/maps/LinkedParticlesMap';
 import {IMap} from './class/engine2D/maps/Map';
 import {ColoredWaveMap} from './class/engine2D/maps/ColoredWaveMap';
-import {TextMap} from './class/engine2D/maps/TextMap';
+import {TransformMap} from './class/engine2D/maps/TransformMap';
 
 interface IOptions {
 	demoType?: 'example01' | 'example02' | 'example03' | 'example04';
@@ -43,10 +43,31 @@ class JcParticle {
 				this.scene.updates.push(...this.map.particles);
 				break;
 			case 'example03':
-				this.map = new TextMap(this.scene);
+				const textMap = new TransformMap(this.scene);
+				document.getElementById('importText').addEventListener('input', ($event: InputEvent) => {
+					const target: HTMLInputElement = $event.target as HTMLInputElement;
+					textMap.loadText(target.value);
+				});
+				document.getElementById('importImg').addEventListener('input', ($event: InputEvent) => {
+					const target: HTMLInputElement = $event.target as HTMLInputElement;
+					const reader = new FileReader();
+					const file = target.files[0];
+					const img = document.createElement('img');
+					reader.addEventListener('load', () => {
+						img.src = reader.result as string;
+					});
+					img.addEventListener('load', () => {
+						textMap.loadImage(img);
+					});
+					if (file) {
+						reader.readAsDataURL(file);
+					}
+				});
+				this.scene.draws.push(textMap);
+				this.scene.updates.push(textMap);
 				break;
 			case 'example04':
-				this.map = new TextMap(this.scene);
+				this.map = new TransformMap(this.scene);
 				break;
 		}
 	}

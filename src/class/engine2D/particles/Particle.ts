@@ -19,11 +19,15 @@ export type MoveTypes =
 export class Particle extends PositionPoint implements IUpdate, IDraw {
 	alpha: number = 1;
 	distanceTeleport = 50;
+	red: number = 0; // todo : refactor color to rgb object and hsl object
+	green: number = 0;
+	blue: number = 0;
 	hue: number = 0;
+	useHsl: boolean = true;
 	light: number = 0;
 	moveTypes: MoveTypes[] = [];
 	radius: number = 1;
-	walkStrength: number = 3;
+	walkStrength: number = 3; // refactor at object walk random generator
 	walkFrequency: number = 0.95;
 	returnAtStarted: boolean;
 	saturation: number = 0;
@@ -36,11 +40,30 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 	}
 
 	get color(): string {
-		if (this.alpha === 1) {
-			return `hsl(${this.hue},${this.saturation}%,${this.light}%)`;
-		} else {
+		if (this.alpha >= 1) {
+			if (this.useHsl) {
+				return `hsl(${this.hue},${this.saturation}%,${this.light}%)`;
+			}
+			return `rgb(${this.red},${this.green},${this.blue})`;
+		}
+		if (this.useHsl) {
 			return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
 		}
+		return `rgba(${this.red},${this.green},${this.blue},${this.alpha})`;
+	}
+
+	setRgb(r: number, g: number, b: number) {
+		this.useHsl = false;
+		this.red = r;
+		this.green = g;
+		this.blue = b;
+	}
+
+	setHsl(h: number, s: number, l: number) {
+		this.useHsl = true;
+		this.hue = h;
+		this.saturation = s;
+		this.light = l;
 	}
 
 	bounce(scene: CanvasScene) {
@@ -83,6 +106,9 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		this.hue = Math.round(Math.random() * 360);
 		this.saturation = Math.round(Math.random() * 100);
 		this.light = Math.round(Math.random() * 100);
+		this.red = Math.round(Math.random() * 255);
+		this.green = Math.round(Math.random() * 255);
+		this.blue = Math.round(Math.random() * 255);
 	}
 
 	teleport(scene: CanvasScene) {

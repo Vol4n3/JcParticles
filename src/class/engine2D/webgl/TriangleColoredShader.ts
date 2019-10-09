@@ -1,5 +1,4 @@
 import {Matrix3} from '../Math/Matrix3';
-import {ColorMat4} from './ColorMat4';
 
 export interface IShaderTransform {
 	width: number,
@@ -98,7 +97,7 @@ void main() {
 		this._gl.deleteBuffer(this._colorBuffer);
 	}
 
-	drawGl(gl: WebGLRenderingContext, transform: IShaderTransform, colorsMat4: ColorMat4 = new ColorMat4()) {
+	drawGl(gl: WebGLRenderingContext, transform: IShaderTransform) {
 		if (!this._gl) {
 			this._init(gl);
 		}
@@ -110,7 +109,7 @@ void main() {
 			.scale(transform.scale.x, transform.scale.y)
 			.translate(transform.rotation.x, transform.rotation.y);
 		this._gl.uniformMatrix3fv(this.getUniformLocationBy('u_matrix'), false, matrix.data);
-		this._gl.uniformMatrix4fv(this.getUniformLocationBy('u_colors'), false, colorsMat4.data);
+		this._gl.uniformMatrix4fv(this.getUniformLocationBy('u_colors'), false, new Float32Array([1, 1, 0, 1]));
 		this._gl.drawArrays(this._gl.TRIANGLE_FAN, 0, this._vertices.length / 2);
 	}
 

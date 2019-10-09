@@ -1,13 +1,16 @@
-export class Color {
+export class RGBColor {
 
 	constructor(public red: number = 0,
 				public green: number = 0,
 				public blue: number = 0,
-				public alpha: number = 1,) {
+				public alpha: number = 1) {
 
 	}
 
-	static fromHSLA(hue: number, saturate: number, light: number, alpha: number): Color {
+	/**
+	 * todo: not work properly
+	 */
+	static fromHSLA(hue: number, saturate: number, light: number): RGBColor {
 		saturate /= 100;
 		light /= 100;
 
@@ -45,10 +48,6 @@ export class Color {
 		red = Math.round((red + m));
 		green = Math.round((green + m));
 		blue = Math.round((blue + m));
-		return new Color(red, green, blue, alpha);
-	}
-
-	toVec4(): number[] {
-		return [this.red, this.green, this.blue, this.alpha];
+		return new RGBColor(red, green, blue);
 	}
 }
