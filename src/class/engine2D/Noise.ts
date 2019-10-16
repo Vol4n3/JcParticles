@@ -1,5 +1,0 @@
-export class Noise {
-	constructor() {
-
-	}
-}

@@ -1,8 +1,8 @@
-import {CanvasScene} from './class/engine2D/CanvasScene';
-import {LinkedParticlesMap} from './class/engine2D/maps/LinkedParticlesMap';
-import {IMap} from './class/engine2D/maps/Map';
-import {ColoredWaveMap} from './class/engine2D/maps/ColoredWaveMap';
-import {TransformMap} from './class/engine2D/maps/TransformMap';
+import {CanvasScene} from './core/engine2D/CanvasScene';
+import {LinkedParticlesMap} from './core/engine2D/maps/LinkedParticlesMap';
+import {IMap} from './core/engine2D/maps/Map';
+import {ColoredWaveMap} from './core/engine2D/maps/ColoredWaveMap';
+import {TransformMap} from './core/engine2D/maps/TransformMap';
 
 interface IOptions {
 	demoType?: 'example01' | 'example02' | 'example03' | 'example04';
@@ -44,6 +44,7 @@ class JcParticle {
 				break;
 			case 'example03':
 				const textMap = new TransformMap(this.scene);
+				textMap.loadText();
 				document.getElementById('importText').addEventListener('input', ($event: InputEvent) => {
 					const target: HTMLInputElement = $event.target as HTMLInputElement;
 					textMap.loadText(target.value);

@@ -41,7 +41,7 @@ export class TransformMap implements IMap {
 	createParticles(colorPoints: ColorPoint[]) {
 		this.particles = [];
 		colorPoints.forEach((p) => {
-			const ep: Particle = new Particle(p.x * 6, p.y * 6);
+			const ep: Particle = new Particle(p.x * 3, p.y * 3);
 			ep.moveTypes = ['vibration'];
 			ep.setRgb(p.rgbColor.red, p.rgbColor.green, p.rgbColor.blue);
 			ep.alpha = p.rgbColor.alpha;

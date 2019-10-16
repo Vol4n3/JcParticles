@@ -1,5 +1,5 @@
-import {Point} from '../class/geometry2D/Point';
-import {Rectangle} from '../class/geometry2D/Rectangle';
+import {Point} from '../core/geometry2D/Point';
+import {Rectangle} from '../core/geometry2D/Rectangle';
 
 describe('Rectangle', () => {
 	test('should intersect', () => {

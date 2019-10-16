@@ -1,6 +1,12 @@
+export interface ITransform {
+	width: number,
+	height: number,
+	position: { x: number, y: number };
+	rotation: { x: number, y: number, angle: number },
+	scale: { x: number, y: number }
+}
 export class Matrix3 {
 	constructor(public data: Float32Array = Matrix3.identity) {
-
 	}
 
 	static get identity() {
@@ -9,6 +15,15 @@ export class Matrix3 {
 			0, 1, 0,
 			0, 0, 1,
 		]);
+	}
+
+	static transform2D(transform: ITransform): Matrix3 {
+		return new Matrix3()
+			.project(transform.width, transform.height)
+			.translate(transform.position.x, transform.position.y)
+			.rotate(transform.rotation.angle)
+			.scale(transform.scale.x, transform.scale.y)
+			.translate(transform.rotation.x, transform.rotation.y);
 	}
 
 	static translation(tx: number, ty: number): Float32Array {

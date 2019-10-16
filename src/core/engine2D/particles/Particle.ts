@@ -39,17 +39,32 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		this._startedPosition = this.copy();
 	}
 
+	get cssRGBA(): string {
+		return `rgba(${this.red},${this.green},${this.blue},${this.alpha})`;
+	}
+
+	get cssRGB(): string {
+		return `rgb(${this.red},${this.green},${this.blue})`;
+	}
+
+	get cssHSL(): string {
+		return `hsl(${this.hue},${this.saturation}%,${this.light}%)`;
+	}
+
+	get cssHSLA(): string {
+		return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
+	}
 	get color(): string {
 		if (this.alpha >= 1) {
 			if (this.useHsl) {
-				return `hsl(${this.hue},${this.saturation}%,${this.light}%)`;
+				return this.cssHSL;
 			}
-			return `rgb(${this.red},${this.green},${this.blue})`;
+			return this.cssRGB;
 		}
 		if (this.useHsl) {
-			return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
+			return this.cssHSLA;
 		}
-		return `rgba(${this.red},${this.green},${this.blue},${this.alpha})`;
+		return this.cssRGBA;
 	}
 
 	setRgb(r: number, g: number, b: number) {

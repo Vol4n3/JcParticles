@@ -2,7 +2,7 @@
   "name": "jcparticle",
   "version": "1.0.0",
   "repository": "https://github.com/Vol4n3/JcParticles.git",
-  "description": "This lib is for make simple particles animations in canvas 2D js",
+  "description": "This lib make simple particles animations in canvas 2D js",
   "main": "./dist/JcParticle.js",
   "scripts": {
     "test": "jest",
