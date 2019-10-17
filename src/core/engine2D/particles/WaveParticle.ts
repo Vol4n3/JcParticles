@@ -17,7 +17,7 @@ export class WaveParticle extends Particle {
 		super(x, y);
 		this._centerY = y;
 		this.y = this._centerY + Math.cos(this._increment) * this._maxHeight;
-		this.randomColor();
+		this.rgbColor.random();
 	}
 
 	draw(scene: CanvasScene) {

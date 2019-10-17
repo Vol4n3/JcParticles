@@ -43,8 +43,7 @@ export class TransformMap implements IMap {
 		colorPoints.forEach((p) => {
 			const ep: Particle = new Particle(p.x, p.y);
 			ep.moveTypes = ['vibration'];
-			ep.setRgb(p.rgbColor.red, p.rgbColor.green, p.rgbColor.blue);
-			ep.alpha = p.rgbColor.alpha;
+			ep.rgbColor = p.rgbColor.copy();
 			ep.radius = 3;
 			ep.returnAtStarted = true;
 			ep.friction = new Point(0.12, 0.12);
@@ -60,9 +59,6 @@ export class TransformMap implements IMap {
 
 	draw(scene: CanvasScene): void {
 		this.particles.forEach(p => p.draw(scene));
-	}
-
-	drawGl(scene: CanvasScene): void {
 	}
 
 	update(scene: CanvasScene): void {

@@ -1,6 +1,6 @@
 import {Rectangle} from './Rectangle';
 import {Circle} from './Circle';
-import {MathUtils} from '../engine2D/Math/Utils';
+import {MathUtils} from '../Math/Utils';
 
 export class Point {
 	constructor(public x: number = 0, public y: number = 0) {
@@ -26,7 +26,7 @@ export class Point {
 		return new Point(this.x, this.y);
 	}
 
-	makePolygonPoints(face: number, radius: number, startAngle = 0): Point[] {
+	makePolygonPoints(face: number, radius: number, startAngle = 0, asVertices?: boolean): number[] | Point[] {
 		const points = [];
 		if (face < 3) {
 			face = 3
@@ -34,27 +34,13 @@ export class Point {
 		let centerAng = 2 * Math.PI / face;
 		for (let i = 0; i < face; i++) {
 			const ang = startAngle + (i * centerAng);
-			const vx = this.x + radius * Math.cos(ang);
-			const vy = this.y - radius * Math.sin(ang);
-			points.push(new Point(vx, vy));
-		}
-		return points
-	}
-
-	/**
-	 * @deprecated
-	 */
-	makePolygonVertices(face: number, radius: number, startAngle = 0): number[] {
-		const points = [];
-		if (face < 3) {
-			face = 3
-		}
-		let centerAng = 2 * Math.PI / face;
-		for (let i = 0; i < face; i++) {
-			const ang = startAngle + (i * centerAng);
-			const vx = this.x + radius * Math.cos(ang);
-			const vy = this.y - radius * Math.sin(ang);
-			points.push(vx, vy);
+			const vx: number = this.x + radius * Math.cos(ang);
+			const vy: number = this.y - radius * Math.sin(ang);
+			if (asVertices) {
+				points.push(vx, vy);
+			} else {
+				points.push(new Point(vx, vy));
+			}
 		}
 		return points
 	}

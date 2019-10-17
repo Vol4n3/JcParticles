@@ -28,7 +28,4 @@ export class Link extends Segment<Particle> implements IDraw {
 		scene.ctx.closePath();
 		scene.ctx.restore();
 	}
-
-	drawGl(scene: CanvasScene): void {
-	}
 }

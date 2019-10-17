@@ -3,6 +3,7 @@ import {LinkedParticlesMap} from './core/engine2D/maps/LinkedParticlesMap';
 import {IMap} from './core/engine2D/maps/Map';
 import {ColoredWaveMap} from './core/engine2D/maps/ColoredWaveMap';
 import {TransformMap} from './core/engine2D/maps/TransformMap';
+import {GLMap} from './core/engine2D/maps/GLMap';
 
 interface IOptions {
 	demoType?: 'example01' | 'example02' | 'example03' | 'example04';
@@ -68,7 +69,10 @@ class JcParticle {
 				this.scene.updates.push(textMap);
 				break;
 			case 'example04':
-				this.map = new TransformMap(this.scene);
+
+				this.map = new GLMap(this.scene);
+				this.scene.draws.push(this.map);
+				this.scene.updates.push(this.map);
 				break;
 		}
 	}

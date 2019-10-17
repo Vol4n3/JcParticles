@@ -21,7 +21,7 @@ export class LinkedParticlesMap implements IMap {
 		p.radius = Math.round(Math.random() * 2 + 1);
 		p.velocity.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
 		p.moveTypes = ['bounce'];
-		p.randomColor();
+		p.rgbColor.random();
 		this.particles.push(p);
         this._scene.draws.push(p);
         this._scene.updates.push(p);
@@ -40,8 +40,5 @@ export class LinkedParticlesMap implements IMap {
 				lp.draw(game);
 			}
 		}
-	}
-
-	drawGl(scene: CanvasScene): void {
 	}
 }

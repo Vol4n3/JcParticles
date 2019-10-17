@@ -23,7 +23,4 @@ export class Segment<T extends Point> implements IDraw {
 		scene.ctx.closePath();
 	}
 
-	drawGl(scene: CanvasScene): void {
-	}
-
 }

@@ -19,9 +19,6 @@ export class ColoredWaveMap implements IMap {
 
 	particles: Particle[] = [];
 
-	drawGl(scene: CanvasScene): void {
-	}
-
 	update(scene: CanvasScene): void {
 	}
 

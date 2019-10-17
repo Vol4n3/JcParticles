@@ -22,10 +22,6 @@ export class VelocityMap implements IMap {
 	draw(scene: CanvasScene): void {
 	}
 
-	drawGl(scene: CanvasScene): void {
-
-	}
-
 	getNearFlow(x: number, y: number): Vector {
 		const roundedX = Math.round(x / 20);
 		const roundedY = Math.round(y / 20);

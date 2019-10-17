@@ -1,8 +1,10 @@
 import {PositionPoint} from '../PositionPoint';
 import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
 import {Point} from '../../geometry2D/Point';
-import {MathUtils} from '../Math/Utils';
+import {MathUtils} from '../../Math/Utils';
 import {Vector} from '../../geometry2D/Vector';
+import {RGBColor} from '../RGBColor';
+import {Matrix3} from '../../Math/Matrix3';
 
 
 export type MoveTypes =
@@ -17,20 +19,13 @@ export type MoveTypes =
 	| 'randomWalk'
 
 export class Particle extends PositionPoint implements IUpdate, IDraw {
-	alpha: number = 1;
 	distanceTeleport = 50;
-	red: number = 0; // todo : refactor color to rgb object and hsl object
-	green: number = 0;
-	blue: number = 0;
-	hue: number = 0;
-	useHsl: boolean = true;
-	light: number = 0;
+	rgbColor = new RGBColor();
 	moveTypes: MoveTypes[] = [];
 	radius: number = 1;
 	walkStrength: number = 3; // refactor at object walk random generator
 	walkFrequency: number = 0.95;
 	returnAtStarted: boolean;
-	saturation: number = 0;
 	vibrationStrength: number = 5;
 	protected _startedPosition: Point;
 
@@ -39,46 +34,21 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		this._startedPosition = this.copy();
 	}
 
-	get cssRGBA(): string {
-		return `rgba(${this.red},${this.green},${this.blue},${this.alpha})`;
-	}
-
-	get cssRGB(): string {
-		return `rgb(${this.red},${this.green},${this.blue})`;
-	}
-
-	get cssHSL(): string {
-		return `hsl(${this.hue},${this.saturation}%,${this.light}%)`;
-	}
-
-	get cssHSLA(): string {
-		return `hsla(${this.hue},${this.saturation}%,${this.light}%,${this.alpha})`;
-	}
 	get color(): string {
-		if (this.alpha >= 1) {
-			if (this.useHsl) {
-				return this.cssHSL;
-			}
-			return this.cssRGB;
+		if (this.rgbColor.alpha >= 1) {
+			return this.rgbColor.toRGBCss();
 		}
-		if (this.useHsl) {
-			return this.cssHSLA;
-		}
-		return this.cssRGBA;
+		return this.rgbColor.toRGBACss();
 	}
 
-	setRgb(r: number, g: number, b: number) {
-		this.useHsl = false;
-		this.red = r;
-		this.green = g;
-		this.blue = b;
-	}
-
-	setHsl(h: number, s: number, l: number) {
-		this.useHsl = true;
-		this.hue = h;
-		this.saturation = s;
-		this.light = l;
+	getTransformMatrix3(widthProjection: number, heightProjection: number): Matrix3 {
+		return Matrix3.transform2D({
+			width: widthProjection,
+			height: heightProjection,
+			position: {x: this.x, y: this.y},
+			rotation: {angle: 0, x: 0, y: 0},
+			scale: {x: this.radius, y: this.radius}
+		});
 	}
 
 	bounce(scene: CanvasScene) {
@@ -109,21 +79,12 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		scene.ctx.closePath();
 	}
 
-	drawGl(scene: CanvasScene): void {
-
-	}
-
 	hasMoveType(mt: MoveTypes): boolean {
 		return this.moveTypes.indexOf(mt) > -1;
 	}
 
 	randomColor(): void {
-		this.hue = Math.round(Math.random() * 360);
-		this.saturation = Math.round(Math.random() * 100);
-		this.light = Math.round(Math.random() * 100);
-		this.red = Math.round(Math.random() * 255);
-		this.green = Math.round(Math.random() * 255);
-		this.blue = Math.round(Math.random() * 255);
+
 	}
 
 	teleport(scene: CanvasScene) {
@@ -162,7 +123,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		}
 		if (Math.random() > this.walkFrequency) {
 			const actual = new Vector(this.velocity);
-			actual.angle += MathUtils.randomRange(Math.PI / 2);
+			actual.angle += MathUtils.randomRange(Math.PI / 3);
 			actual.length += MathUtils.randomRange(this.walkStrength);
 			this.velocity = actual.destination;
 		}

@@ -3,7 +3,6 @@ import {Interaction} from './Interaction';
 
 export interface IDraw {
 	draw(scene: CanvasScene): void;
-	drawGl(scene: CanvasScene): void;
 }
 
 export interface IUpdate {
@@ -20,6 +19,8 @@ export class CanvasScene {
 	draws: IDraw[] = [];
 	updates: IUpdate[] = [];
 	interaction: Interaction;
+	width: number;
+	height: number;
 	private _resizeRef = this.resize.bind(this);
 	private _animateRef = this.animate.bind(this);
 	private _loopRef = this.loop.bind(this);
@@ -28,6 +29,8 @@ export class CanvasScene {
 
 	constructor(containerId: string, webgl?: boolean) {
 		this.container = document.getElementById(containerId);
+		window.addEventListener('resize', this._resizeRef);
+		this.resize();
 		if (webgl) {
 			this.gl = this.canvas.getContext('webgl2');
 			this.useGL = true;
@@ -44,20 +47,11 @@ export class CanvasScene {
 		}
 		this.canvas.style.display = 'block';
 		this.container.appendChild(this.canvas);
-		window.addEventListener('resize', this._resizeRef);
-		this.resize();
 		this._animationFrame = requestAnimationFrame(this._animateRef);
 		this._interval = setInterval(this._loopRef, 1000 / 45);
 		this.interaction = new Interaction(this);
 	}
 
-	get height(): number {
-		return this.container.clientHeight;
-	}
-
-	get width(): number {
-		return this.container.clientWidth;
-	}
 
 	loop() {
 		this.updates.forEach((item) => {
@@ -72,18 +66,19 @@ export class CanvasScene {
 			this.ctx.clearRect(0, 0, this.width, this.height);
 		}
 		this.draws.forEach((item) => {
-			if (this.useGL) {
-				item.drawGl(this);
-			} else {
-				item.draw(this);
-			}
+			item.draw(this);
 		});
 		requestAnimationFrame(this._animateRef);
 	}
 
 	resize() {
+		this.width = this.container.clientWidth;
+		this.height = this.container.clientHeight;
 		this.canvas.width = this.width;
 		this.canvas.height = this.height;
+		if (this.useGL) {
+			this.gl.viewport(0, 0, this.width, this.height);
+		}
 	}
 
 	destroy() {

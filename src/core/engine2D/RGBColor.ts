@@ -7,6 +7,9 @@ export class RGBColor {
 
 	}
 
+	copy() {
+		return new RGBColor(this.red, this.green, this.blue, this.alpha);
+	}
 	toVec4(): Float32Array {
 		return new Float32Array([this.red / 255, this.green / 255, this.blue / 255, this.alpha]);
 	}
@@ -17,5 +20,11 @@ export class RGBColor {
 
 	toRGBCss(): string {
 		return `rgb(${this.red},${this.green},${this.blue})`;
+	}
+
+	random() {
+		this.red = Math.round(Math.random() * 255);
+		this.green = Math.round(Math.random() * 255);
+		this.blue = Math.round(Math.random() * 255);
 	}
 }
