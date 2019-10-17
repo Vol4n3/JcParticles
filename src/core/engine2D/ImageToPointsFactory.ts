@@ -1,7 +1,7 @@
 import {ColorPoint} from './ColorPoint';
 import {RGBColor} from './RGBColor';
 
-export class CanvasToPoints {
+export class ImageToPointsFactory {
 	private _canvas: HTMLCanvasElement;
 	private _ctx: CanvasRenderingContext2D;
 
@@ -18,7 +18,11 @@ export class CanvasToPoints {
 		this.setSize(image.width, image.height);
 		this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
 		this._ctx.drawImage(image, 0, 0);
-		return this.getPixel();
+		const resX = image.width / 300;
+		const resY = image.height / 300;
+		let res = Math.round((resX * 4 + resY * 4) / 2);
+		res = (res < 2) ? 2 : res;
+		return this.getPixel(res);
 	}
 
 	setSize(width: number, height: number) {
@@ -26,7 +30,7 @@ export class CanvasToPoints {
 		this._canvas.height = height;
 	}
 
-	getPixel(mask: RGBColor = new RGBColor(240, 240, 240, 1), resolution: number = 1): ColorPoint[] {
+	getPixel(resolution: number = 1, mask: RGBColor = new RGBColor(240, 240, 240, 1)): ColorPoint[] {
 		const imageData = this._ctx.getImageData(0, 0, this._canvas.width, this._canvas.height);
 		const res: ColorPoint[] = [];
 		for (let x = 0; x < imageData.width; x += resolution) {
@@ -44,14 +48,14 @@ export class CanvasToPoints {
 		return res;
 	}
 
-	FromText(text: string, fontSize: number = 18, fontFamily: string = "'Arial', sans-serif", fontColor: string = "rgba(0,0,0,1)"): ColorPoint[] {
-		this.setSize(fontSize * text.length, fontSize);
+	FromText(text: string, fontSize: number = 40, fontFamily: string = "'Arial', sans-serif", fontColor: string = "rgba(0,0,0,1)"): ColorPoint[] {
+		this.setSize(fontSize * text.length, fontSize * 2);
 		this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
 		this._ctx.fillStyle = "rgba(255,255,255,0.1)";
 		this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
 		this._ctx.font = `${fontSize}px ${fontFamily}`;
 		this._ctx.fillStyle = fontColor;
-		this._ctx.fillText(text, 0, 18);
-		return this.getPixel();
+		this._ctx.fillText(text, 0, fontSize);
+		return this.getPixel(2);
 	}
 }

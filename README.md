@@ -16,7 +16,7 @@ Tested in Chrome only for the moment
 
 *  https://vol4n3.github.io/JcParticles/example/linked-particles.html
 *  https://vol4n3.github.io/JcParticles/example/wave-line.html
-*  https://vol4n3.github.io/JcParticles/example/elastic-text.html
+*  https://vol4n3.github.io/JcParticles/example/text-image-convert.html
 
 ## Usage ##
 

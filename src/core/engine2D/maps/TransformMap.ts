@@ -1,7 +1,7 @@
 import {IMap} from './Map';
 import {Particle} from '../particles/Particle';
 import {CanvasScene} from '../CanvasScene';
-import {CanvasToPoints} from '../CanvasToPoints';
+import {ImageToPointsFactory} from '../ImageToPointsFactory';
 import {Point} from '../../geometry2D/Point';
 import {Circle} from '../../geometry2D/Circle';
 import {Vector} from '../../geometry2D/Vector';
@@ -10,7 +10,7 @@ import {ColorPoint} from '../ColorPoint';
 
 export class TransformMap implements IMap {
 	particles: Particle[] = [];
-	canvasToPoint = new CanvasToPoints();
+	canvasToPoint = new ImageToPointsFactory();
 
 	constructor(private _scene: CanvasScene) {
 		this._scene.interaction.subscribesHover.push(($event: MouseEvent): void => {
@@ -41,7 +41,7 @@ export class TransformMap implements IMap {
 	createParticles(colorPoints: ColorPoint[]) {
 		this.particles = [];
 		colorPoints.forEach((p) => {
-			const ep: Particle = new Particle(p.x * 3, p.y * 3);
+			const ep: Particle = new Particle(p.x, p.y);
 			ep.moveTypes = ['vibration'];
 			ep.setRgb(p.rgbColor.red, p.rgbColor.green, p.rgbColor.blue);
 			ep.alpha = p.rgbColor.alpha;
