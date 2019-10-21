@@ -1,4 +1,4 @@
-import {CanvasScene} from '../CanvasScene';
+import {SceneRenderer} from '../SceneRenderer';
 import {Particle} from './Particle';
 
 export class WaveParticle extends Particle {
@@ -20,7 +20,7 @@ export class WaveParticle extends Particle {
 		this.rgbColor.random();
 	}
 
-	draw(scene: CanvasScene) {
+	draw(scene: SceneRenderer) {
 		scene.ctx.fillStyle = this.color;
 		scene.ctx.beginPath();
 		scene.ctx.ellipse(this.x, this._centerY, 4, this.ellipseHeight, this.ellipseRotation, 0, Math.PI * 2);
@@ -28,7 +28,7 @@ export class WaveParticle extends Particle {
 		scene.ctx.closePath();
 	}
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		super.update(scene);
 		if (this._increment > Math.PI * 2) {
 			this._increment -= Math.PI * 2;

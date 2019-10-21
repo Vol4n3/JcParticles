@@ -1,10 +1,10 @@
 import {Particle} from '../particles/Particle';
-import {CanvasScene} from '../CanvasScene';
+import {SceneRenderer} from '../SceneRenderer';
 import {WaveParticle} from '../particles/WaveParticle';
-import {IMap} from './Map';
+import {IScene} from './Scene';
 
-export class ColoredWaveMap implements IMap {
-	constructor(private _scene: CanvasScene) {
+export class ColoredWaveScene implements IScene {
+	constructor(private _scene: SceneRenderer) {
 		const particleNumber = 30;
 		const maxHeight = 40;
 		for (let i = 1; i < particleNumber; i++) {
@@ -19,10 +19,10 @@ export class ColoredWaveMap implements IMap {
 
 	particles: Particle[] = [];
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 	}
 
-	draw(scene: CanvasScene): void {
+	draw(scene: SceneRenderer): void {
 
 	}
 

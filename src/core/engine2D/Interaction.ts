@@ -1,4 +1,4 @@
-import {CanvasScene} from './CanvasScene';
+import {SceneRenderer} from './SceneRenderer';
 
 export class Interaction {
 	subscribesClick: (($event: MouseEvent) => void)[] = [];
@@ -6,7 +6,7 @@ export class Interaction {
 	private _refOnClick = this._OnClick.bind(this);
 	private _refOnHover = this._OnHover.bind(this);
 
-	constructor(private _scene: CanvasScene) {
+	constructor(private _scene: SceneRenderer) {
 		this._scene.canvas.addEventListener('click', this._refOnClick);
 		this._scene.canvas.addEventListener('mousemove', this._refOnHover);
 	}

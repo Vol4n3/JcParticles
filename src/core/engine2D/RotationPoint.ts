@@ -1,5 +1,5 @@
 import {Point} from '../geometry2D/Point';
-import {CanvasScene, IUpdate} from './CanvasScene';
+import {IUpdate, SceneRenderer} from './SceneRenderer';
 
 export class RotationPoint extends Point implements IUpdate {
 	friction = 1;
@@ -7,7 +7,7 @@ export class RotationPoint extends Point implements IUpdate {
 	angle = 0;
 
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		this.velocity *= this.friction;
 		this.angle += this.velocity;
 	}

@@ -1,5 +1,5 @@
 import {Segment} from '../geometry2D/Segment';
-import {CanvasScene, IDraw} from './CanvasScene';
+import {IDraw, SceneRenderer} from './SceneRenderer';
 import {Particle} from './particles/Particle';
 
 export class Link extends Segment<Particle> implements IDraw {
@@ -10,7 +10,7 @@ export class Link extends Segment<Particle> implements IDraw {
 		return Math.round((1 - this.length / this.maxlength) * 10) / 10;
 	}
 
-	draw(scene: CanvasScene) {
+	draw(scene: SceneRenderer) {
 		if (this.alpha < 0.1) {
 			return;
 		}

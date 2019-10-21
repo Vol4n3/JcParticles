@@ -1,5 +1,5 @@
 import {Point} from '../geometry2D/Point';
-import {CanvasScene, IUpdate} from './CanvasScene';
+import {IUpdate, SceneRenderer} from './SceneRenderer';
 
 
 export class PositionPoint extends Point implements IUpdate {
@@ -14,7 +14,7 @@ export class PositionPoint extends Point implements IUpdate {
 	protected _timeCount = 0;
 	protected _callback: () => void;
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		if (!this._isTargeting) {
 			if (this.maxVelocity > 0) {
 				this.velocity.x = (this.velocity.x > this.maxVelocity) ? this.maxVelocity : this.velocity.x;

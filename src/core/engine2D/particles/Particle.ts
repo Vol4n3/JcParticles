@@ -1,5 +1,5 @@
 import {PositionPoint} from '../PositionPoint';
-import {CanvasScene, IDraw, IUpdate} from '../CanvasScene';
+import {IDraw, IUpdate, SceneRenderer} from '../SceneRenderer';
 import {Point} from '../../geometry2D/Point';
 import {MathUtils} from '../../Math/Utils';
 import {Vector} from '../../geometry2D/Vector';
@@ -51,7 +51,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		});
 	}
 
-	bounce(scene: CanvasScene) {
+	bounce(scene: SceneRenderer) {
 		if (this.hasMoveType('bounce') || this.hasMoveType('bounceX')) {
 			this.bounceBox('x', scene.width - this.radius);
 			this.bounceBox('x', this.radius, true);
@@ -71,7 +71,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		this.velocity[key] *= -1;
 	}
 
-	draw(scene: CanvasScene): void {
+	draw(scene: SceneRenderer): void {
 		scene.ctx.fillStyle = this.color;
 		scene.ctx.beginPath();
 		scene.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -87,7 +87,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 
 	}
 
-	teleport(scene: CanvasScene) {
+	teleport(scene: SceneRenderer) {
 		if (this.hasMoveType('teleport') || this.hasMoveType('teleportX')) {
 			this.teleportBox('x', scene.width + this.distanceTeleport, -this.distanceTeleport);
 			this.teleportBox('x', -this.distanceTeleport, scene.width + this.distanceTeleport, true);
@@ -129,7 +129,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		}
 	}
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		super.update(scene);
 		this.bounce(scene);
 		this.teleport(scene);

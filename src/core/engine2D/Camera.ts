@@ -1,14 +1,14 @@
 import {PositionPoint} from './PositionPoint';
 import {Point} from '../geometry2D/Point';
 import {RotationPoint} from './RotationPoint';
-import {CanvasScene, IUpdate} from './CanvasScene';
+import {IUpdate, SceneRenderer} from './SceneRenderer';
 
 export class Camera implements IUpdate {
 	position: PositionPoint = new PositionPoint();
 	scale: Point = new Point(1, 1);
 	rotation: RotationPoint = new RotationPoint();
 
-	update(scene: CanvasScene) {
+	update(scene: SceneRenderer) {
 		this.position.update(scene);
 		this.rotation.update(scene);
 	}

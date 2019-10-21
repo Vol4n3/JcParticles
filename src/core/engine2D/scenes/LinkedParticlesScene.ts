@@ -1,19 +1,19 @@
 import {Link} from '../Link';
-import {CanvasScene} from '../CanvasScene';
-import {IMap} from './Map';
+import {SceneRenderer} from '../SceneRenderer';
+import {IScene} from './Scene';
 import {Particle} from '../particles/Particle';
 
-export class LinkedParticlesMap implements IMap {
-	update(scene: CanvasScene): void {
+export class LinkedParticlesScene implements IScene {
+	constructor(private _scene: SceneRenderer, private _particlesNumber: number) {
+		for (let i = 0; i < this._particlesNumber; i++) {
+			this.addParticle();
+		}
 	}
 
 	particles: Particle[] = [];
 	maxLinkLength: number = 70;
 
-	constructor(private _scene: CanvasScene, private _particlesNumber: number) {
-		for (let i = 0; i < this._particlesNumber; i++) {
-			this.addParticle();
-		}
+	update(scene: SceneRenderer): void {
 	}
 
 	addParticle() {
@@ -27,7 +27,7 @@ export class LinkedParticlesMap implements IMap {
         this._scene.updates.push(p);
 	}
 
-	draw(game: CanvasScene): void {
+	draw(game: SceneRenderer): void {
 		for (let i = 0; i < this._particlesNumber; i++) {
 			for (let j = i + 1; j < this._particlesNumber; j++) {
 				const pi = this.particles[i];

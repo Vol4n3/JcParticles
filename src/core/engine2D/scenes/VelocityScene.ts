@@ -1,13 +1,13 @@
-import {IMap} from './Map';
+import {IScene} from './Scene';
 import {Particle} from '../particles/Particle';
-import {CanvasScene} from '../CanvasScene';
+import {SceneRenderer} from '../SceneRenderer';
 import {Vector} from '../../geometry2D/Vector';
 
-export class VelocityMap implements IMap {
+export class VelocityScene implements IScene {
 	particles: Particle[] = [];
 	velocityGrid: Vector[] = [];
 
-	constructor(private _scene: CanvasScene) {
+	constructor(private _scene: SceneRenderer) {
 		for (let p = 0; p < 20; p++) {
 			const fish = new Particle(Math.random() * this._scene.width, Math.random() * this._scene.height);
 			fish.moveTypes.push('teleport', 'randomWalk');
@@ -19,7 +19,7 @@ export class VelocityMap implements IMap {
 		}
 	}
 
-	draw(scene: CanvasScene): void {
+	draw(scene: SceneRenderer): void {
 	}
 
 	getNearFlow(x: number, y: number): Vector {
@@ -29,7 +29,7 @@ export class VelocityMap implements IMap {
 		return this.velocityGrid[index];
 	}
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		for (let p = 1; p < this.particles.length; p++) {
 			const distance = this.particles[p].distanceTo(this.particles[0]);
 			if (distance > 3 && distance < 100) {

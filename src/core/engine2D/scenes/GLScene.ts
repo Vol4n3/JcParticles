@@ -1,15 +1,15 @@
-import {IMap} from './Map';
+import {IScene} from './Scene';
 import {Shader} from '../../webgl/Shader';
 import {Polygon2DUniColor} from '../webgl/Polygon2DUniColor';
 import {Point} from '../../geometry2D/Point';
 import {Particle} from '../particles/Particle';
-import {CanvasScene} from '../CanvasScene';
+import {SceneRenderer} from '../SceneRenderer';
 
-export class GLMap implements IMap {
+export class GLScene implements IScene {
 	particles: Particle[] = [];
 	polygonShape: Polygon2DUniColor;
 
-	constructor(private _scene: CanvasScene) {
+	constructor(private _scene: SceneRenderer) {
 		const shader = new Shader(this._scene.gl, Polygon2DUniColor.vertex, Polygon2DUniColor.fragment);
 		const center = new Point();
 		this.polygonShape = new Polygon2DUniColor(this._scene.gl, shader, center.makePolygonPoints(6, 1, 0, true) as number[]);
@@ -25,7 +25,7 @@ export class GLMap implements IMap {
 		}
 	}
 
-	draw(scene: CanvasScene): void {
+	draw(scene: SceneRenderer): void {
 		this.particles.forEach((p) => {
 			if (scene.useGL) {
 				this.polygonShape.drawGl(p.getTransformMatrix3(scene.width, scene.height), p.rgbColor);
@@ -35,7 +35,7 @@ export class GLMap implements IMap {
 		});
 	}
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		this.particles.forEach((p) => {
 			p.update(scene);
 		})

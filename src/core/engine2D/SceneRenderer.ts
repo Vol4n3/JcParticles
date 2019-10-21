@@ -2,14 +2,14 @@ import {Camera} from './Camera';
 import {Interaction} from './Interaction';
 
 export interface IDraw {
-	draw(scene: CanvasScene): void;
+	draw(scene: SceneRenderer): void;
 }
 
 export interface IUpdate {
-	update(scene: CanvasScene): void;
+	update(scene: SceneRenderer): void;
 }
 
-export class CanvasScene {
+export class SceneRenderer {
 	canvas: HTMLCanvasElement = document.createElement('canvas');
 	container: HTMLElement;
 	ctx: CanvasRenderingContext2D;

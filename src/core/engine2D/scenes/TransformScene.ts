@@ -1,6 +1,6 @@
-import {IMap} from './Map';
+import {IScene} from './Scene';
 import {Particle} from '../particles/Particle';
-import {CanvasScene} from '../CanvasScene';
+import {SceneRenderer} from '../SceneRenderer';
 import {ImageToPointsFactory} from '../ImageToPointsFactory';
 import {Point} from '../../geometry2D/Point';
 import {Circle} from '../../geometry2D/Circle';
@@ -8,11 +8,11 @@ import {Vector} from '../../geometry2D/Vector';
 import {Segment} from '../../geometry2D/Segment';
 import {ColorPoint} from '../ColorPoint';
 
-export class TransformMap implements IMap {
+export class TransformScene implements IScene {
 	particles: Particle[] = [];
 	canvasToPoint = new ImageToPointsFactory();
 
-	constructor(private _scene: CanvasScene) {
+	constructor(private _scene: SceneRenderer) {
 		this._scene.interaction.subscribesHover.push(($event: MouseEvent): void => {
 			const circle = new Circle($event.x, $event.y);
 			circle.radius = 30;
@@ -57,11 +57,11 @@ export class TransformMap implements IMap {
 		this.createParticles(points);
 	}
 
-	draw(scene: CanvasScene): void {
+	draw(scene: SceneRenderer): void {
 		this.particles.forEach(p => p.draw(scene));
 	}
 
-	update(scene: CanvasScene): void {
+	update(scene: SceneRenderer): void {
 		this.particles.forEach(p => p.update(scene));
 	}
 }
