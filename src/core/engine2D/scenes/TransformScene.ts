@@ -21,9 +21,9 @@ export class TransformScene implements IScene {
 						const vector: Vector = new Segment(circle, p).vector;
 						vector.length = circle.radius * 3;
 						p.velocity.add(vector.destination);
-						p.returnAtStarted = false;
+						p.moveTypes = ['vibration', 'pinned'];
 					} else {
-						p.returnAtStarted = true;
+						p.moveTypes = ['vibration'];
 					}
 				}
 			)
@@ -42,10 +42,9 @@ export class TransformScene implements IScene {
 		this.particles = [];
 		colorPoints.forEach((p) => {
 			const ep: Particle = new Particle(p.x, p.y);
-			ep.moveTypes = ['vibration'];
+			ep.moveTypes = ['vibration', 'pinned'];
 			ep.rgbColor = p.rgbColor.copy();
 			ep.radius = 3;
-			ep.returnAtStarted = true;
 			ep.friction = new Point(0.12, 0.12);
 			ep.translate(Math.random() * this._scene.width, Math.random() * this._scene.height);
 			this.particles.push(ep);

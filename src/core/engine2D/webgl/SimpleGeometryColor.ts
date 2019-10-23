@@ -2,11 +2,12 @@ import {Matrix3} from '../../Math/Matrix3';
 import {Shader} from '../../webgl/Shader';
 import {RGBColor} from '../RGBColor';
 
-export class Polygon2DUniColor {
+export class SimpleGeometryColor {
 	private _positionBuffer: WebGLBuffer;
 	private _colorBuffer: WebGLBuffer;
 	private _uMatrixLocation = this._shader.getUniformLocationBy('u_matrix');
 	private _uColorLocation = this._shader.getUniformLocationBy('u_colors');
+	private _uDepthLocation = this._shader.getUniformLocationBy('u_depth');
 
 	constructor(private _gl: WebGLRenderingContext, private _shader: Shader, private readonly _vertices: number[]) {
 		this._init();
@@ -17,9 +18,10 @@ export class Polygon2DUniColor {
 in vec2 a_position;
 uniform vec4 u_colors;
 uniform mat3 u_matrix;
+uniform float u_depth;
 out vec4 v_color;
 void main() {
-	gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, 0, 1);
+	gl_Position = vec4((u_matrix * vec3(a_position, 1)).xy, u_depth, 1);
 	v_color = u_colors;
 }
 `;
@@ -42,16 +44,15 @@ void main() {
 		this._gl.deleteBuffer(this._colorBuffer);
 	}
 
-	drawGl(transform: Matrix3, color: RGBColor) {
+	drawGl(transform: Matrix3, color: RGBColor, depth: number = 0) {
 		this._gl.useProgram(this._shader.program);
 		this._gl.uniformMatrix3fv(this._uMatrixLocation, false, transform.data);
 		this._gl.uniform4fv(this._uColorLocation, color.toVec4());
+		this._gl.uniform1f(this._uDepthLocation, depth);
 		this._gl.drawArrays(this._gl.TRIANGLE_FAN, 0, this._vertices.length / 2);
 	}
 
 	private _init(): void {
-		// buffer
-		// geometry position
 		this._positionBuffer = this._gl.createBuffer();
 		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._positionBuffer);
 		this._gl.bufferData(this._gl.ARRAY_BUFFER,

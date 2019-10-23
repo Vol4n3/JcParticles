@@ -5,6 +5,7 @@ import {MathUtils} from '../../Math/Utils';
 import {Vector} from '../../geometry2D/Vector';
 import {RGBColor} from '../RGBColor';
 import {Matrix3} from '../../Math/Matrix3';
+import {RotationPoint} from '../RotationPoint';
 
 
 export type MoveTypes =
@@ -23,10 +24,12 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 	rgbColor = new RGBColor();
 	moveTypes: MoveTypes[] = [];
 	radius: number = 1;
+	depth: number = 0;
+	rotation: RotationPoint = new RotationPoint();
 	walkStrength: number = 3; // refactor at object walk random generator
 	walkFrequency: number = 0.95;
-	returnAtStarted: boolean;
 	vibrationStrength: number = 5;
+	transformMat3: Matrix3 = new Matrix3();
 	protected _startedPosition: Point;
 
 	constructor(x: number = 0, y: number = 0) {
@@ -41,12 +44,12 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		return this.rgbColor.toRGBACss();
 	}
 
-	getTransformMatrix3(widthProjection: number, heightProjection: number): Matrix3 {
-		return Matrix3.transform2D({
+	updateMat3(widthProjection: number, heightProjection: number): void {
+		this.transformMat3 = Matrix3.transform2D({
 			width: widthProjection,
 			height: heightProjection,
 			position: {x: this.x, y: this.y},
-			rotation: {angle: 0, x: 0, y: 0},
+			rotation: {angle: this.rotation.angle, x: this.rotation.x, y: this.rotation.y},
 			scale: {x: this.radius, y: this.radius}
 		});
 	}
@@ -81,10 +84,6 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 
 	hasMoveType(mt: MoveTypes): boolean {
 		return this.moveTypes.indexOf(mt) > -1;
-	}
-
-	randomColor(): void {
-
 	}
 
 	teleport(scene: SceneRenderer) {
@@ -123,8 +122,8 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		}
 		if (Math.random() > this.walkFrequency) {
 			const actual = new Vector(this.velocity);
-			actual.angle += MathUtils.randomRange(Math.PI / 3);
-			actual.length += MathUtils.randomRange(this.walkStrength);
+			actual.angle += MathUtils.randomRange(Math.PI * 2);
+			actual.length = Math.random() * this.walkStrength;
 			this.velocity = actual.destination;
 		}
 	}
@@ -135,9 +134,10 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		this.teleport(scene);
 		this.vibration();
 		this.randomWalk();
-		if (this.returnAtStarted) {
+		if (this.hasMoveType('pinned')) {
 			this.attractTo(this._startedPosition);
 		}
+		this.updateMat3(scene.width, scene.height);
 	}
 
 	vibration() {

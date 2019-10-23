@@ -40,6 +40,7 @@ export class SceneRenderer {
 		}
 		if (this.gl) {
 			this.gl.viewport(0, 0, this.width, this.height);
+			this.gl.enable(this.gl.DEPTH_TEST);
 			this.gl.clearColor(0, 0, 0, 0);
 		} else {
 			this.ctx = this.canvas.getContext('2d');

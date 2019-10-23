@@ -49,7 +49,7 @@ describe('Point', () => {
 		expect(point).not.toEqual(copy);
 	});
 	test('should be make a polygon', () => {
-		const triangle = point.makePolygonPoints(5, 3, 0);
+		const triangle: Point[] = point.makePolygonPoints(5, 3, 0) as Point[];
 		expect(triangle.length).toBe(5);
 		expect(triangle[0].x).toBe(3);
 		expect(triangle[0].y).toBe(0);

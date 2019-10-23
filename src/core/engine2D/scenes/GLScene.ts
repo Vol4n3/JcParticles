@@ -1,25 +1,25 @@
 import {IScene} from './Scene';
 import {Shader} from '../../webgl/Shader';
-import {Polygon2DUniColor} from '../webgl/Polygon2DUniColor';
+import {SimpleGeometryColor} from '../webgl/SimpleGeometryColor';
 import {Point} from '../../geometry2D/Point';
 import {Particle} from '../particles/Particle';
 import {SceneRenderer} from '../SceneRenderer';
+import {RGBColor} from '../RGBColor';
 
 export class GLScene implements IScene {
 	particles: Particle[] = [];
-	polygonShape: Polygon2DUniColor;
+	polygonShape: SimpleGeometryColor;
 
-	constructor(private _scene: SceneRenderer) {
-		const shader = new Shader(this._scene.gl, Polygon2DUniColor.vertex, Polygon2DUniColor.fragment);
+	constructor(private _sc: SceneRenderer) {
+		const shader = new Shader(this._sc.gl, SimpleGeometryColor.vertex, SimpleGeometryColor.fragment);
 		const center = new Point();
-		this.polygonShape = new Polygon2DUniColor(this._scene.gl, shader, center.makePolygonPoints(6, 1, 0, true) as number[]);
-		for (let i = 0; i < 1500; i++) {
-			const p = new Particle(Math.random() * this._scene.width, Math.random() * this._scene.height);
-			p.moveTypes.push('vibration', 'bounce');
-			p.vibrationStrength = 1;
-			p.returnAtStarted = true;
+		this.polygonShape = new SimpleGeometryColor(this._sc.gl, shader, center.makePolygonPoints(6, 1, 0, true) as number[]);
+		const samplesColor = [RGBColor.random(), RGBColor.random(), RGBColor.random()];
+		for (let i = 0; i < 150; i++) {
+			const p = new Particle(Math.random() * this._sc.width, Math.random() * this._sc.height);
+			p.moveTypes.push('randomWalk', 'bounce');
 			p.maxVelocity = 10;
-			p.rgbColor.random();
+			p.rgbColor.random(samplesColor);
 			p.radius = Math.random() * 10;
 			this.particles.push(p);
 		}
@@ -28,7 +28,7 @@ export class GLScene implements IScene {
 	draw(scene: SceneRenderer): void {
 		this.particles.forEach((p) => {
 			if (scene.useGL) {
-				this.polygonShape.drawGl(p.getTransformMatrix3(scene.width, scene.height), p.rgbColor);
+				this.polygonShape.drawGl(p.transformMat3, p.rgbColor, p.depth);
 			} else {
 				p.draw(scene);
 			}
