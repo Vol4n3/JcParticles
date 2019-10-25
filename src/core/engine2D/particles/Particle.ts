@@ -138,9 +138,6 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		if (Math.random() > this.walkFrequency) {
 			const angleRand = MathUtils.randomRange(Math.PI / 4);
 			this.velocity.rotateAround(new Point(), angleRand);
-			const randMultiply = Math.random() + 0.5;
-			this.velocity.x *= randMultiply;
-			this.velocity.y *= randMultiply;
 		}
 	}
 
