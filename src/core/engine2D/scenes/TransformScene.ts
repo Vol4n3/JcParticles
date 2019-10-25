@@ -12,8 +12,8 @@ export class TransformScene implements IScene {
 	particles: Particle[] = [];
 	canvasToPoint = new ImageToPointsFactory();
 
-	constructor(private _scene: SceneRenderer) {
-		this._scene.interaction.subscribesHover.push(($event: MouseEvent): void => {
+	constructor(private _sc: SceneRenderer) {
+		this._sc.interaction.subscribesHover.push(($event: MouseEvent): void => {
 			const circle = new Circle($event.x, $event.y);
 			circle.radius = 30;
 			this.particles.forEach((p) => {
@@ -46,7 +46,7 @@ export class TransformScene implements IScene {
 			ep.rgbColor = p.rgbColor.copy();
 			ep.radius = 3;
 			ep.friction = new Point(0.12, 0.12);
-			ep.translate(Math.random() * this._scene.width, Math.random() * this._scene.height);
+			ep.translate(Math.random() * this._sc.width, Math.random() * this._sc.height);
 			this.particles.push(ep);
 		});
 	}

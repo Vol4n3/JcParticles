@@ -2,7 +2,6 @@ import {PositionPoint} from '../PositionPoint';
 import {IDraw, IUpdate, SceneRenderer} from '../SceneRenderer';
 import {Point} from '../../geometry2D/Point';
 import {MathUtils} from '../../Math/Utils';
-import {Vector} from '../../geometry2D/Vector';
 import {RGBColor} from '../RGBColor';
 import {Matrix3} from '../../Math/Matrix3';
 import {RotationPoint} from '../RotationPoint';
@@ -29,7 +28,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 	walkStrength: number = 3; // refactor at object walk random generator
 	walkFrequency: number = 0.95;
 	vibrationStrength: number = 5;
-	transformMat3: Matrix3 = new Matrix3();
+	transformMat3: Matrix3;
 	protected _startedPosition: Point;
 
 	constructor(x: number = 0, y: number = 0) {
@@ -54,7 +53,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		});
 	}
 
-	bounce(scene: SceneRenderer) {
+	_bounce(scene: SceneRenderer) {
 		if (this.hasMoveType('bounce') || this.hasMoveType('bounceX')) {
 			this.bounceBox('x', scene.width - this.radius);
 			this.bounceBox('x', this.radius, true);
@@ -75,6 +74,10 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 	}
 
 	draw(scene: SceneRenderer): void {
+		if (scene.useGL) {
+			console.warn('Particle draw fn not yet implemented for webgl');
+			return;
+		}
 		scene.ctx.fillStyle = this.color;
 		scene.ctx.beginPath();
 		scene.ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
@@ -86,7 +89,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		return this.moveTypes.indexOf(mt) > -1;
 	}
 
-	teleport(scene: SceneRenderer) {
+	_teleport(scene: SceneRenderer) {
 		if (this.hasMoveType('teleport') || this.hasMoveType('teleportX')) {
 			this.teleportBox('x', scene.width + this.distanceTeleport, -this.distanceTeleport);
 			this.teleportBox('x', -this.distanceTeleport, scene.width + this.distanceTeleport, true);
@@ -116,31 +119,32 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		))
 	}
 
-	randomWalk() {
-		if (!this.hasMoveType('randomWalk')) {
-			return;
-		}
-		if (Math.random() > this.walkFrequency) {
-			const actual = new Vector(this.velocity);
-			actual.angle += MathUtils.randomRange(Math.PI * 2);
-			actual.length = Math.random() * this.walkStrength;
-			this.velocity = actual.destination;
-		}
-	}
-
 	update(scene: SceneRenderer): void {
 		super.update(scene);
-		this.bounce(scene);
-		this.teleport(scene);
-		this.vibration();
-		this.randomWalk();
+		this._bounce(scene);
+		this._teleport(scene);
+		this._vibration();
+		this._randomWalk();
 		if (this.hasMoveType('pinned')) {
 			this.attractTo(this._startedPosition);
 		}
 		this.updateMat3(scene.width, scene.height);
 	}
 
-	vibration() {
+	private _randomWalk() {
+		if (!this.hasMoveType('randomWalk')) {
+			return;
+		}
+		if (Math.random() > this.walkFrequency) {
+			const angleRand = MathUtils.randomRange(Math.PI / 4);
+			this.velocity.rotateAround(new Point(), angleRand);
+			const randMultiply = Math.random() + 0.5;
+			this.velocity.x *= randMultiply;
+			this.velocity.y *= randMultiply;
+		}
+	}
+
+	private _vibration() {
 		if (!this.hasMoveType('vibration')) {
 			return;
 		}

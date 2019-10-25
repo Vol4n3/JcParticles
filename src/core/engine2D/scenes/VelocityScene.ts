@@ -7,14 +7,14 @@ export class VelocityScene implements IScene {
 	particles: Particle[] = [];
 	velocityGrid: Vector[] = [];
 
-	constructor(private _scene: SceneRenderer) {
+	constructor(private _sc: SceneRenderer) {
 		for (let p = 0; p < 20; p++) {
-			const fish = new Particle(Math.random() * this._scene.width, Math.random() * this._scene.height);
+			const fish = new Particle(Math.random() * this._sc.width, Math.random() * this._sc.height);
 			fish.moveTypes.push('teleport', 'randomWalk');
 			fish.maxVelocity = 3;
 			fish.radius = 5;
-			this._scene.draws.push(fish);
-			this._scene.updates.push(fish);
+			this._sc.draws.push(fish);
+			this._sc.updates.push(fish);
 			this.particles.push(fish);
 		}
 	}
@@ -25,7 +25,7 @@ export class VelocityScene implements IScene {
 	getNearFlow(x: number, y: number): Vector {
 		const roundedX = Math.round(x / 20);
 		const roundedY = Math.round(y / 20);
-		const index = roundedX + Math.round(this._scene.width / 20) * roundedY;
+		const index = roundedX + Math.round(this._sc.width / 20) * roundedY;
 		return this.velocityGrid[index];
 	}
 

@@ -52,8 +52,8 @@ export class Matrix3 extends Matrix {
 		const c = Math.cos(angle);
 		const s = Math.sin(angle);
 		return new Float32Array([
-			c, -s, 0,
-			s, c, 0,
+			c, s, 0,
+			-s, c, 0,
 			0, 0, 1,
 		]);
 	}

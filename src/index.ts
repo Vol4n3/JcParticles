@@ -4,9 +4,10 @@ import {IScene} from './core/engine2D/scenes/Scene';
 import {ColoredWaveScene} from './core/engine2D/scenes/ColoredWaveScene';
 import {TransformScene} from './core/engine2D/scenes/TransformScene';
 import {GLScene} from './core/engine2D/scenes/GLScene';
+import {BoidsScene} from './core/engine2D/scenes/BoidsScene';
 
 interface IOptions {
-	demoType?: 'example01' | 'example02' | 'example03' | 'example04';
+	demoType?: 'example01' | 'example02' | 'example03' | 'example04' | 'example05';
 }
 
 class JcParticle {
@@ -21,6 +22,7 @@ class JcParticle {
 				this.scene = new SceneRenderer(containerId);
 				break;
 			case 'example04':
+			case 'example05':
 				this.scene = new SceneRenderer(containerId, true);
 		}
 		if (_options.demoType) {
@@ -70,6 +72,11 @@ class JcParticle {
 				break;
 			case 'example04':
 				this.map = new GLScene(this.scene);
+				this.scene.draws.push(this.map);
+				this.scene.updates.push(this.map);
+				break;
+			case 'example05':
+				this.map = new BoidsScene(this.scene);
 				this.scene.draws.push(this.map);
 				this.scene.updates.push(this.map);
 				break;

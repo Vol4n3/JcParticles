@@ -11,6 +11,13 @@ export class Point {
 		return Math.atan2(p.y - this.y, p.x - this.x);
 	}
 
+	get isZero(): boolean {
+		return this.x === 0 && this.y === 0;
+	}
+
+	angleFrom(p: Point): number {
+		return Math.atan2(this.y - p.y, this.x - p.x);
+	}
 	distanceTo(p: Point): number {
 		const dx = p.x - this.x,
 			dy = p.y - this.y;
@@ -70,10 +77,12 @@ export class Point {
 	rotateAround(origin: Point, angle: number) {
 		const cos = Math.cos(angle);
 		const sin = Math.sin(angle);
-		this.moveTo(new Point(
-			(cos * (this.x - origin.x)) + (sin * (this.y - origin.y)) + origin.x,
-			(cos * (this.y - origin.y)) - (sin * (this.x - origin.x)) + origin.y
-		));
+		const dx = this.x - origin.x;
+		const dy = this.y - origin.y;
+		this.translate(
+			dx * cos + dy * sin + origin.x,
+			-dx * sin + dy * cos + origin.y
+		);
 	}
 
 	translate(x: number, y: number) {

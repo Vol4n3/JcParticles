@@ -4,7 +4,7 @@ import {IScene} from './Scene';
 import {Particle} from '../particles/Particle';
 
 export class LinkedParticlesScene implements IScene {
-	constructor(private _scene: SceneRenderer, private _particlesNumber: number) {
+	constructor(private _sc: SceneRenderer, private _particlesNumber: number) {
 		for (let i = 0; i < this._particlesNumber; i++) {
 			this.addParticle();
 		}
@@ -17,14 +17,14 @@ export class LinkedParticlesScene implements IScene {
 	}
 
 	addParticle() {
-		const p = new Particle(Math.random() * this._scene.width, Math.random() * this._scene.height);
+		const p = new Particle(Math.random() * this._sc.width, Math.random() * this._sc.height);
 		p.radius = Math.round(Math.random() * 2 + 1);
 		p.velocity.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
 		p.moveTypes = ['bounce'];
 		p.rgbColor.random();
 		this.particles.push(p);
-        this._scene.draws.push(p);
-        this._scene.updates.push(p);
+		this._sc.draws.push(p);
+		this._sc.updates.push(p);
 	}
 
 	draw(game: SceneRenderer): void {
