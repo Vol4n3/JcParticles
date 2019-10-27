@@ -7,6 +7,12 @@ export class Point {
 
 	}
 
+	moveDirection(angle: number, distance: number) {
+		this.translate(
+			Math.cos(angle) * distance,
+			Math.sin(angle) * distance
+		)
+	}
 	angleTo(p: Point): number {
 		return Math.atan2(p.y - this.y, p.x - this.x);
 	}
@@ -74,6 +80,10 @@ export class Point {
 		return (this.x - p2.x) * (p1.y - p2.y) - (p1.x - p2.x) * (this.y - p2.y);
 	}
 
+	random(n: number) {
+		this.x = MathUtils.randomRange(n);
+		this.y = MathUtils.randomRange(n);
+	}
 	rotateAround(origin: Point, angle: number) {
 		const cos = Math.cos(angle);
 		const sin = Math.sin(angle);

@@ -19,6 +19,7 @@ export class GLScene implements IScene {
 			const p = new Particle(Math.random() * _sc.width, Math.random() * _sc.height);
 			p.moveTypes.push('randomWalk', 'bounce');
 			p.maxVelocity = 10;
+			p.velocity.random(5);
 			p.rgbColor.random(samplesColor);
 			p.radius = Math.random() * 10;
 			this.particles.push(p);

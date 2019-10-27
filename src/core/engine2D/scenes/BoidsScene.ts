@@ -18,8 +18,12 @@ export class BoidsScene implements IScene {
 			1, -1
 		]);
 		const p = new Particle(100, 100);
-		p.moveTypes = ['randomWalk', 'bounce'];
-		p.velocity.x = 2;
+		p.moveTypes = ['bounce'];
+		p.velocity.x = 1;
+		p.velocity.rotateAround(new Point(), Math.PI / 4);
+		const vAngle = p.velocity.angleFrom(new Point());
+		p.velocity.moveDirection(vAngle, 2);
+		// p.velocity.moveDirection(Math.PI/ 2,1);
 		p.radius = 10;
 		this.particles.push(p);
 	}

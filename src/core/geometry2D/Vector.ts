@@ -16,8 +16,9 @@ export class Vector {
 		return this._origin.distanceTo(this.destination);
 	}
 
-	constructor(public destination: Point = new Point()) {
-
+	set length(length: number) {
+		const a = this.angle;
+		this.destination.moveDirection(a, length)
 	}
 
 	copy() {
@@ -27,11 +28,7 @@ export class Vector {
 	makeSegmentFrom(origin: Point): Segment<Point> {
 		return new Segment<Point>(origin.copy(), origin.copyAdd(this.destination));
 	}
-	set length(length: number) {
-		const a = this.angle;
-		this.destination.translate(
-			Math.cos(a) * length,
-			Math.sin(a) * length
-		)
+
+	constructor(public destination: Point = new Point()) {
 	}
 }

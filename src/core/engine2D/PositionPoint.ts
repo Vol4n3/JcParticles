@@ -1,5 +1,6 @@
 import {Point} from '../geometry2D/Point';
 import {IUpdate, SceneRenderer} from './SceneRenderer';
+import {Vector} from '../geometry2D/Vector';
 
 
 export class PositionPoint extends Point implements IUpdate {
@@ -17,10 +18,11 @@ export class PositionPoint extends Point implements IUpdate {
 	update(scene: SceneRenderer): void {
 		if (!this._isTargeting) {
 			if (this.maxVelocity > 0) {
-				this.velocity.x = (this.velocity.x > this.maxVelocity) ? this.maxVelocity : this.velocity.x;
-				this.velocity.x = (this.velocity.x < -this.maxVelocity) ? -this.maxVelocity : this.velocity.x;
-				this.velocity.y = (this.velocity.y > this.maxVelocity) ? this.maxVelocity : this.velocity.y;
-				this.velocity.y = (this.velocity.y < -this.maxVelocity) ? -this.maxVelocity : this.velocity.y;
+				const currentLength = this.velocity.distanceTo(new Point());
+				if (currentLength > this.maxVelocity) {
+					const vec = new Vector(this.velocity);
+					vec.length = this.maxVelocity;
+				}
 			}
 			this.velocity.multiply(this.friction);
 			this.add(this.velocity);

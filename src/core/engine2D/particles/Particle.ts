@@ -5,6 +5,7 @@ import {MathUtils} from '../../Math/Utils';
 import {RGBColor} from '../RGBColor';
 import {Matrix3} from '../../Math/Matrix3';
 import {RotationPoint} from '../RotationPoint';
+import {Vector} from '../../geometry2D/Vector';
 
 
 export type MoveTypes =
@@ -136,8 +137,11 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 			return;
 		}
 		if (Math.random() > this.walkFrequency) {
-			const angleRand = MathUtils.randomRange(Math.PI / 4);
-			this.velocity.rotateAround(new Point(), angleRand);
+			const randAngle = MathUtils.randomRange(Math.PI / 4);
+			const randDistance = Math.random() * this.walkStrength;
+			const vec = new Vector(this.velocity);
+			vec.angle = randAngle;
+			vec.length = randDistance;
 		}
 	}
 

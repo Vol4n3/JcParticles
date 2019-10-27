@@ -1,6 +1,12 @@
 export namespace MathUtils {
-    export const randomRange = (n: number) => {
-        return Math.random() * n * 2 - n;
+    export const randomRange = (max: number, min?: number) => {
+        if (typeof min !== 'undefined') {
+            if (min > max) {
+                max = min;
+            }
+            return Math.round(Math.random() * (max - min) + min);
+        }
+        return Math.random() * max * 2 - max;
     };
     export const round = (n: number, decimal: number = 1): number => {
         return Math.round(n * decimal) / decimal
