@@ -18,4 +18,8 @@ describe('MathUtil', () => {
 		expect(MathUtils.round(10.44, 100)).toBe(10.44);
 		expect(MathUtils.round(10.44, 1000)).toBe(10.44);
 	});
+	test('average', () => {
+		expect(MathUtils.average([1, 2])).toBe(1.5);
+		expect(MathUtils.average([10, 6, -10])).toBe(2);
+	})
 });
