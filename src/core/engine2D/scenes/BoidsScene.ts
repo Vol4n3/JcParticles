@@ -4,6 +4,7 @@ import {SceneRenderer} from '../SceneRenderer';
 import {Shader} from '../../webgl/Shader';
 import {SimpleGeometryColor} from '../webgl/SimpleGeometryColor';
 import {Point} from '../../geometry2D/Point';
+import {Segment} from '../../geometry2D/Segment';
 
 export class BoidsScene implements IScene {
 	particles: Particle[] = [];
@@ -17,15 +18,13 @@ export class BoidsScene implements IScene {
 			-1, 0,
 			1, -1
 		]);
-		const p = new Particle(100, 100);
-		p.moveTypes = ['bounce'];
-		p.velocity.x = 1;
-		p.velocity.rotateAround(new Point(), Math.PI / 4);
-		const vAngle = p.velocity.angleFrom(new Point());
-		p.velocity.moveDirection(vAngle, 2);
-		// p.velocity.moveDirection(Math.PI/ 2,1);
-		p.radius = 10;
-		this.particles.push(p);
+		for (let i = 0; i < 100; i++) {
+			const p = new Particle(Math.random() * _sc.width, Math.random() * _sc.height);
+			p.moveTypes = ['randomWalk', 'bounce'];
+			p.velocity.x = 2;
+			p.radius = 10;
+			this.particles.push(p);
+		}
 	}
 
 	draw(scene: SceneRenderer): void {
@@ -42,12 +41,22 @@ export class BoidsScene implements IScene {
 	}
 
 	update(scene: SceneRenderer): void {
-		this.particles.forEach((p) => {
+		for (let i = 0; i < this.particles.length; i++) {
+			const p = this.particles[i];
+			for (let j = i + 1; j < this.particles.length; j++) {
+				const otherP = this.particles[j];
+				if (p.distanceTo(otherP) < p.radius + otherP.radius) {
+					const seg = new Segment(p, otherP);
+					seg.startLength = (p.radius + otherP.radius);
+					console.log(seg);
+					p.randomDirection();
+				}
+			}
 			if (!p.velocity.isZero) {
 				p.rotation.angle = p.velocity.angleTo(new Point());
 			}
 			p.update(scene);
-		})
+		}
 	}
 
 }

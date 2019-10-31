@@ -7,8 +7,32 @@ export class Segment<T extends Point> implements IDraw {
 
 	}
 
+	get startAngle(): number {
+		return this.start.angleTo(this.end);
+	}
+
+	get endAngle(): number {
+		return this.end.angleTo(this.start);
+	}
+
 	get length(): number {
 		return this.start.distanceTo(this.end);
+	}
+
+	/**
+	 * @depecrated
+	 * @param length
+	 */
+	set startLength(length: number) {
+		this.start.moveDirection(this.endAngle, length);
+	}
+
+	/**
+	 * @depecrated
+	 * @param length
+	 */
+	set endLength(length: number) {
+		this.end.moveDirection(this.startAngle, length);
 	}
 
 	get vector(): Vector {

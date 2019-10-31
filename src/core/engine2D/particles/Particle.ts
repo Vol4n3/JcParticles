@@ -132,16 +132,19 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		this.updateMat3(scene.width, scene.height);
 	}
 
+	randomDirection() {
+		const randAngle = MathUtils.randomRange(Math.PI / 4);
+		const randDistance = Math.random() * this.walkStrength;
+		const vec = new Vector(this.velocity);
+		vec.angle = randAngle;
+		vec.length = randDistance;
+	}
 	private _randomWalk() {
 		if (!this.hasMoveType('randomWalk')) {
 			return;
 		}
 		if (Math.random() > this.walkFrequency) {
-			const randAngle = MathUtils.randomRange(Math.PI / 4);
-			const randDistance = Math.random() * this.walkStrength;
-			const vec = new Vector(this.velocity);
-			vec.angle = randAngle;
-			vec.length = randDistance;
+			this.randomDirection();
 		}
 	}
 
