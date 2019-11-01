@@ -8,10 +8,10 @@ export class Point {
 	}
 
 	moveDirection(angle: number, distance: number) {
-		this.translate(
+		this.add(new Point(
 			Math.cos(angle) * distance,
 			Math.sin(angle) * distance
-		)
+		))
 	}
 	angleTo(p: Point): number {
 		return Math.atan2(p.y - this.y, p.x - this.x);

@@ -18,7 +18,9 @@ export class Vector {
 
 	set length(length: number) {
 		const a = this.angle;
-		this.destination.moveDirection(a, length)
+        const target = new Point();
+        target.moveDirection(a, length);
+        this.destination.moveTo(target);
 	}
 
 	copy() {

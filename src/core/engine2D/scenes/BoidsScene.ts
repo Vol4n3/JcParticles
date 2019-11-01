@@ -22,6 +22,7 @@ export class BoidsScene implements IScene {
 			const p = new Particle(Math.random() * _sc.width, Math.random() * _sc.height);
 			p.moveTypes = ['randomWalk', 'bounce'];
 			p.velocity.x = 2;
+			p.maxVelocity = 0;
 			p.radius = 10;
 			this.particles.push(p);
 		}
@@ -48,7 +49,6 @@ export class BoidsScene implements IScene {
 				if (p.distanceTo(otherP) < p.radius + otherP.radius) {
 					const seg = new Segment(p, otherP);
 					seg.startLength = (p.radius + otherP.radius);
-					console.log(seg);
 					p.randomDirection();
 				}
 			}

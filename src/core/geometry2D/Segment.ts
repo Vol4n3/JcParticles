@@ -19,21 +19,17 @@ export class Segment<T extends Point> implements IDraw {
 		return this.start.distanceTo(this.end);
 	}
 
-	/**
-	 * @depecrated
-	 * @param length
-	 */
-	set startLength(length: number) {
-		this.start.moveDirection(this.endAngle, length);
-	}
-
-	/**
-	 * @depecrated
-	 * @param length
-	 */
 	set endLength(length: number) {
-		this.end.moveDirection(this.startAngle, length);
-	}
+        const target = this.start.copy();
+        target.moveDirection(this.startAngle, length);
+        this.end.moveTo(target);
+    }
+
+    set startLength(length: number) {
+        const target = this.end.copy();
+        target.moveDirection(this.endAngle, length);
+        this.start.moveTo(target);
+    }
 
 	get vector(): Vector {
 		return new Vector(new Point(this.end.x - this.start.x, this.end.y - this.start.y))
