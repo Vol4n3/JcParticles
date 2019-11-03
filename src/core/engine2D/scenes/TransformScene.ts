@@ -18,7 +18,7 @@ export class TransformScene implements IScene {
 			circle.radius = 30;
 			this.particles.forEach((p) => {
 					if (p.inCircle(circle, true)) {
-						const vector: Vector = new Segment(circle, p).vector;
+                        const vector: Vector = new Segment(circle, p).endVector;
 						vector.length = circle.radius * 3;
 						p.velocity.add(vector.destination);
 						p.moveTypes = ['vibration', 'pinned'];

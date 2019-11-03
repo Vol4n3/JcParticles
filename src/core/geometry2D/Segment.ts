@@ -31,8 +31,12 @@ export class Segment<T extends Point> implements IDraw {
         this.start.moveTo(target);
     }
 
-	get vector(): Vector {
+	get endVector(): Vector {
 		return new Vector(new Point(this.end.x - this.start.x, this.end.y - this.start.y))
+	}
+
+	get startVector(): Vector {
+		return new Vector(new Point(this.start.x - this.end.x, this.start.y - this.end.y))
 	}
 
 	draw(scene: SceneRenderer): void {
