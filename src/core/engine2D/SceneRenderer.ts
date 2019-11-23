@@ -49,7 +49,7 @@ export class SceneRenderer {
 		this.canvas.style.display = 'block';
 		this.container.appendChild(this.canvas);
 		this._animationFrame = requestAnimationFrame(this._animateRef);
-		this._interval = setInterval(this._loopRef, 1000 / 45);
+        this._interval = setInterval(this._loopRef, 1000 / 60);
 		this.interaction = new Interaction(this);
 	}
 

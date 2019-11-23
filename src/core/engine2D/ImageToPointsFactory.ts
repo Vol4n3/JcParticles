@@ -20,7 +20,7 @@ export class ImageToPointsFactory {
 		this._ctx.drawImage(image, 0, 0);
 		const resX = image.width / 300;
 		const resY = image.height / 300;
-		let res = Math.round((resX * 4 + resY * 4) / 2);
+        let res = Math.round((resX * 3 + resY * 3) / 2);
 		res = (res < 2) ? 2 : res;
 		return this.getPixel(res);
 	}
