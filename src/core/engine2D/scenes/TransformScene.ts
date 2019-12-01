@@ -46,12 +46,12 @@ export class TransformScene implements IScene {
     createParticles(colorPoints: ColorPoint[], scaleX: number = 1, scaleY: number = 1) {
 		this.particles = [];
 		colorPoints.forEach((p) => {
-            const ep: Particle = new Particle(p.x * scaleX, p.y * scaleY);
+			const ep: Particle = new Particle(p.x * scaleX, p.y * scaleY);
 			ep.moveTypes = ['vibration', 'pinned'];
 			ep.rgbColor = p.rgbColor.copy();
 			ep.radius = 3;
 			ep.friction = new Point(0.12, 0.12);
-			ep.translate(Math.random() * this._sc.width, Math.random() * this._sc.height);
+			ep.moveTo(new Point(Math.random() * this._sc.width, Math.random() * this._sc.height));
 			this.particles.push(ep);
 		});
 	}

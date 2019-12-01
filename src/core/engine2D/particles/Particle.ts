@@ -136,7 +136,7 @@ export class Particle extends PositionPoint implements IUpdate, IDraw {
 		const randAngle = MathUtils.randomRange(Math.PI / 12);
 		const randDistance = Math.random() * this.walkStrength;
 		const vec = new Vector(this.velocity);
-		vec.angle = randAngle;
+		vec.addAngle(randAngle);
 		vec.length = randDistance;
 	}
 	private _randomWalk() {

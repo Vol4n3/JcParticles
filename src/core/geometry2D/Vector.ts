@@ -8,7 +8,13 @@ export class Vector {
 		return this._origin.angleTo(this.destination);
 	}
 
-	set angle(angle: number) {
+	set angle(angle) {
+		const length = this.length;
+		this.destination.x = Math.cos(angle) * length;
+		this.destination.y = Math.sin(angle) * length;
+	}
+
+	addAngle(angle: number) {
 		this.destination.rotateAround(this._origin, angle);
 	}
 
@@ -18,8 +24,8 @@ export class Vector {
 
 	set length(length: number) {
 		const a = this.angle;
-        const target = new Point();
-        target.moveDirection(a, length);
+		const target = new Point();
+		target.moveDirection(a, length);
         this.destination.moveTo(target);
 	}
 

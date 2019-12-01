@@ -5,9 +5,10 @@ import {ColoredWaveScene} from './core/engine2D/scenes/ColoredWaveScene';
 import {TransformScene} from './core/engine2D/scenes/TransformScene';
 import {GLScene} from './core/engine2D/scenes/GLScene';
 import {BoidsScene} from './core/engine2D/scenes/BoidsScene';
+import {TestScene} from './core/engine2D/scenes/testScene';
 
 interface IOptions {
-	demoType?: 'example01' | 'example02' | 'example03' | 'example04' | 'example05';
+    demoType?: string;
 }
 
 class JcParticle {
@@ -15,16 +16,17 @@ class JcParticle {
 	scene: SceneRenderer;
 
 	constructor(containerId: string, private _options: IOptions = {}) {
-		switch (_options.demoType) {
-			case 'example01':
-			case 'example02':
-				this.scene = new SceneRenderer(containerId);
-				break;
-			case 'example03':
-			case 'example04':
-			case 'example05':
-				this.scene = new SceneRenderer(containerId, true);
-		}
+        switch (_options.demoType) {
+            case 'example01':
+            case 'example02':
+            case 'example06':
+                this.scene = new SceneRenderer(containerId);
+                break;
+            case 'example03':
+            case 'example04':
+            case 'example05':
+                this.scene = new SceneRenderer(containerId, true);
+        }
 		if (_options.demoType) {
 			this.initExample();
 		}
@@ -70,17 +72,22 @@ class JcParticle {
 				this.scene.draws.push(textMap);
 				this.scene.updates.push(textMap);
 				break;
-			case 'example04':
-				this.map = new GLScene(this.scene);
-				this.scene.draws.push(this.map);
-				this.scene.updates.push(this.map);
-				break;
-			case 'example05':
-				this.map = new BoidsScene(this.scene);
-				this.scene.draws.push(this.map);
-				this.scene.updates.push(this.map);
-				break;
-		}
+            case 'example04':
+                this.map = new GLScene(this.scene);
+                this.scene.draws.push(this.map);
+                this.scene.updates.push(this.map);
+                break;
+            case 'example05':
+                this.map = new BoidsScene(this.scene);
+                this.scene.draws.push(this.map);
+                this.scene.updates.push(this.map);
+                break;
+            case 'example06':
+                this.map = new TestScene(this.scene);
+                this.scene.draws.push(this.map);
+                this.scene.updates.push(this.map);
+                break;
+        }
 	}
 }
 

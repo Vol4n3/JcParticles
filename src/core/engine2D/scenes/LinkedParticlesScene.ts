@@ -2,6 +2,7 @@ import {Link} from '../Link';
 import {SceneRenderer} from '../SceneRenderer';
 import {IScene} from './Scene';
 import {Particle} from '../particles/Particle';
+import {Point} from '../../geometry2D/Point';
 
 export class LinkedParticlesScene implements IScene {
 	constructor(private _sc: SceneRenderer, private _particlesNumber: number) {
@@ -19,7 +20,7 @@ export class LinkedParticlesScene implements IScene {
 	addParticle() {
 		const p = new Particle(Math.random() * this._sc.width, Math.random() * this._sc.height);
 		p.radius = Math.round(Math.random() * 2 + 1);
-		p.velocity.translate(Math.random() * 4 - 2, Math.random() * 4 - 2);
+		p.velocity.moveTo(new Point(Math.random() * 4 - 2, Math.random() * 4 - 2));
 		p.moveTypes = ['bounce'];
 		p.rgbColor.random();
 		this.particles.push(p);
