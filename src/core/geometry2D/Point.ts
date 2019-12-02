@@ -1,6 +1,7 @@
 import {Rectangle} from './Rectangle';
 import {Circle} from './Circle';
 import {MathUtils} from '../Math/Utils';
+import {SceneRenderer} from '../engine2D/SceneRenderer';
 
 export class Point {
     get isZero(): boolean {
@@ -103,6 +104,16 @@ export class Point {
             Math.cos(angle) * distance,
             Math.sin(angle) * distance
         ))
+    }
+
+    draw(scene: SceneRenderer) {
+        if (scene.useGL) {
+            return;
+        }
+        scene.ctx.beginPath();
+        scene.ctx.arc(this.x, this.y, 5, 0, Math.PI * 2);
+        scene.ctx.fill();
+        scene.ctx.closePath();
     }
 
     moveTo(point: Point) {

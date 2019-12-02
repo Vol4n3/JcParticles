@@ -1,7 +1,6 @@
 import {IDraw, SceneRenderer} from '../engine2D/SceneRenderer';
 import {Point} from './Point';
 import {Segment} from './Segment';
-import {Vector} from './Vector';
 
 export class Path implements IDraw {
     constructor(public points: Point[], public closed?: boolean) {
@@ -25,56 +24,36 @@ export class Path implements IDraw {
                 scene.ctx.closePath();
                 const contour = this.getWidthStroke(20);
                 contour.forEach((p, index) => {
-                    if (index % 4 === 0) {
-                        scene.ctx.beginPath();
-                        scene.ctx.moveTo(p.x, p.y);
-                    } else {
-                        scene.ctx.lineTo(p.x, p.y);
-                    }
-                    if (index % 4 === 3) {
-                        scene.ctx.fill();
-                        scene.ctx.closePath();
-                    }
+                    p.draw(scene);
                 })
             }
         }
     }
 
-    getEndNormalsPoints(p1: Point, p2: Point, width: number) {
-        const points: Point[] = [];
+    getStartNormalPoint(p1: Point, p2: Point, width: number, negative?: boolean) {
         const seg = new Segment(p1.copy(), p2.copy());
-        seg.startLength = width;
-        seg.addStartAngle(-Math.PI / 2);
-        points.push(seg.start.copy());
-        seg.addStartAngle(Math.PI);
-        points.push(seg.start.copy());
-        return points;
+        seg.moveDirection( seg.startAngle + (negative? -1 : 1) * Math.PI / 2, width);
+        return seg.start;
     }
 
-    getMiddleNormalsPoints(p1: Point, p2: Point, p3: Point, width: number) {
-        const points: Point[] = [];
+    getEndNormalPoint(p1: Point, p2: Point, width: number, negative?: boolean) {
+        const seg = new Segment(p1.copy(), p2.copy());
+        seg.moveDirection( seg.endAngle + (negative? -1 : 1) * Math.PI / 2, width);
+        return seg.end;
+    }
+
+    getStrokeIntersectPoint(p1: Point, p2: Point, p3: Point, width: number, negative?: boolean) {
         const seg1 = new Segment(p1.copy(), p2.copy());
+        seg1.moveDirection( seg1.startAngle + (negative? -1 : 1) * Math.PI / 2, width);
         const seg2 = new Segment(p2.copy(), p3.copy());
-        const angleAverage = (seg1.endAngle + seg2.startAngle) / 2;
-        const vec = new Vector();
-        vec.length = width;
-        vec.angle = angleAverage;
-        const segment = vec.makeSegmentFrom(p2);
-        points.push(segment.end.copy());
-        segment.addEndAngle(Math.PI);
-        points.push(segment.end.copy());
-        return points;
-    }
-
-    getStartNormalsPoints(p1: Point, p2: Point, width: number) {
-        const points: Point[] = [];
-        const seg = new Segment(p1.copy(), p2.copy());
-        seg.endLength = width;
-        seg.addEndAngle(Math.PI / 2);
-        points.push(seg.end.copy());
-        seg.addEndAngle(Math.PI);
-        points.push(seg.end.copy());
-        return points;
+        seg2.moveDirection( seg2.startAngle + (negative? -1 : 1) * Math.PI / 2, width);
+        const intersect = seg1.intersect(seg2, true);
+        if (intersect) {
+            const segTest = new Segment(p2, intersect);
+            if (segTest.length < seg1.length && segTest.length < seg2.length) {
+                return intersect
+            }
+        }
     }
 
     getWidthStroke(width: number): Point[] {
@@ -89,18 +68,26 @@ export class Path implements IDraw {
                     if (this.closed) {
                         break;
                     } else {
-                        points.push(...this.getEndNormalsPoints(previous, current, width))
+                        points.push(this.getStartNormalPoint( current,previous, width, true));
+                        //points.push(this.getStartNormalPoint( previous,current, width,true))
                     }
                 } else {
-                    points.push(...this.getMiddleNormalsPoints(previous, current, next, width));
+                    const iPos = this.getStrokeIntersectPoint(previous, current, next, width);
+                    if(iPos) points.push(iPos);
+                    const iNeg = this.getStrokeIntersectPoint(previous, current, next, width,true);
+                    //if(iNeg) points.push(iNeg);
                 }
             } else {
                 if (this.closed) {
-                    previous = this.points[len - 1];
-                    points.push(...this.getMiddleNormalsPoints(previous, current, next, width));
+                    previous = this.points[len - 2];
+                    const iPos = this.getStrokeIntersectPoint(previous, current, next, width);
+                    if(iPos) points.push(iPos);
+                    const iNeg = this.getStrokeIntersectPoint(previous, current, next, width,true);
+                    //if(iNeg) points.push(iNeg);
                 } else {
                     if (next) {
-                        points.push(...this.getStartNormalsPoints(current, next, width))
+                        points.push(this.getStartNormalPoint( current,next, width));
+                        //points.push(this.getStartNormalPoint( next,current, width,true));
                     }
                 }
             }
