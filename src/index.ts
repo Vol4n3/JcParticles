@@ -19,12 +19,12 @@ class JcParticle {
         switch (_options.demoType) {
             case 'example01':
             case 'example02':
-            case 'example06':
                 this.scene = new SceneRenderer(containerId);
                 break;
             case 'example03':
             case 'example04':
             case 'example05':
+            case 'example06':
                 this.scene = new SceneRenderer(containerId, true);
         }
 		if (_options.demoType) {
